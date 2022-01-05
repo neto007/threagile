@@ -1,15 +1,16 @@
 package unnecessary_data_transfer
 
 import (
-	"github.com/threagile/threagile/model"
 	"sort"
+
+	"github.com/threagile/threagile/model"
 )
 
 func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "unnecessary-data-transfer",
 		Title: "Unnecessary Data Transfer",
-		Description: "When a technical asset sends or receives data assets, which it neither processes or stores this is " +
+		Description: "Quando um ativo técnico envia ou recebe ativos de dados, que não processa ou armazena isso é " +
 			"an indicator for unnecessarily transferred data (or for an incomplete model). When the unnecessarily " +
 			"transferred data assets are sensitive, this poses an unnecessary risk of an increased attack surface.",
 		Impact:     "If this risk is unmitigated, attackers might be able to target unnecessarily transferred data.",

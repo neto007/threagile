@@ -1,29 +1,30 @@
 package unnecessary_data_asset
 
 import (
-	"github.com/threagile/threagile/model"
 	"sort"
+
+	"github.com/threagile/threagile/model"
 )
 
 func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "unnecessary-data-asset",
 		Title: "Unnecessary Data Asset",
-		Description: "When a data asset is not processed or stored by any data assets and also not transferred by any " +
-			"communication links, this is an indicator for an unnecessary data asset (or for an incomplete model).",
-		Impact: "If this risk is unmitigated, attackers might be able to access unnecessary data assets using " +
-			"other vulnerabilities.",
+		Description: "Quando um ativo de dados não é processado ou armazenado por nenhum ativo de dados e também não transferido por qualquer " +
+			"Links de comunicação, este é um indicador para um recurso de dados desnecessário (ou para um modelo incompleto).",
+		Impact: "Se este risco for ignorado, os invasores poderão acessar ativos de dados desnecessários usando " +
+			"outras vulnerabilidades.",
 		ASVS:       "V1 - Architecture, Design and Threat Modeling Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
-		Action:     "Attack Surface Reduction",
+		Action:     "Redução de superfície de ataque",
 		Mitigation: "Try to avoid having data assets that are not required/used.",
-		Check:      "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Check:      "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function:   model.Architecture,
 		STRIDE:     model.ElevationOfPrivilege,
-		DetectionLogic: "Modelled data assets not processed or stored by any data assets and also not transferred by any " +
-			"communication links.",
+		DetectionLogic: "Ativos de dados modelados não processados ou armazenados por quaisquer ativos de dados e também não transferidos por qualquer " +
+			"Links de comunicação..",
 		RiskAssessment:             model.LowSeverity.String(),
-		FalsePositives:             "Usually no false positives as this looks like an incomplete model.",
+		FalsePositives:             "Geralmente não falsos positivos, pois isso parece um modelo incompleto.leto.",
 		ModelFailurePossibleReason: true,
 		CWE:                        1008,
 	}
@@ -70,7 +71,7 @@ func GenerateRisks() []model.Risk {
 
 func createRisk(unusedDataAssetID string) model.Risk {
 	unusedDataAsset := model.ParsedModelRoot.DataAssets[unusedDataAssetID]
-	title := "<b>Unnecessary Data Asset</b> named <b>" + unusedDataAsset.Title + "</b>"
+	title := "<b>Ativos de dados desnecessários</b> nomeada <b>" + unusedDataAsset.Title + "</b>"
 	risk := model.Risk{
 		Category:                    Category(),
 		Severity:                    model.CalculateSeverity(model.Unlikely, model.LowImpact),

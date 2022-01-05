@@ -8,21 +8,21 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "unencrypted-communication",
 		Title: "Unencrypted Communication",
-		Description: "Due to the confidentiality and/or integrity rating of the data assets transferred over the " +
+		Description: "Devido à classificação de confidencialidade e / ou integridade dos ativos de dados transferidos pelo " +
 			"communication link this connection must be encrypted.",
-		Impact:     "If this risk is unmitigated, network attackers might be able to to eavesdrop on unencrypted sensitive data sent between components.",
+		Impact:     "Se este risco for ignorado, os invasores de rede podem ser capazes de espancar os dados sensíveis não criptografados entre os componentes.",
 		ASVS:       "V9 - Communication Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.html",
 		Action:     "Encryption of Communication Links",
-		Mitigation: "Apply transport layer encryption to the communication link.",
-		Check:      "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation: "Aplique criptografia de camada de transporte para o link de comunicação.",
+		Check:      "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function:   model.Operations,
 		STRIDE:     model.InformationDisclosure,
-		DetectionLogic: "Unencrypted technical communication links of in-scope technical assets (excluding " + model.Monitoring.String() + " traffic as well as " + model.LocalFileAccess.String() + " and " + model.InProcessLibraryCall.String() + ") " +
-			"transferring sensitive data.", // TODO more detailed text required here
-		RiskAssessment: "Depending on the confidentiality rating of the transferred data-assets either medium or high risk.",
-		FalsePositives: "When all sensitive data sent over the communication link is already fully encrypted on document or data level. " +
-			"Also intra-container/pod communication can be considered false positive when container orchestration platform handles encryption.",
+		DetectionLogic: "Ligações de comunicação técnica não criptografadas de ativos técnicos de escopo (excluindoexcluindo " + model.Monitoring.String() + " tráfego, bem como" + model.LocalFileAccess.String() + " e " + model.InProcessLibraryCall.String() + ") " +
+			"transferindo dados confidenciais.iais.iais.", // TODO more detailed text required here
+		RiskAssessment: "Dependendo da classificação de confidencialidade dos ativos de dados transferidos ou de alto risco.",
+		FalsePositives: "Quando todos os dados sensíveis enviados pelo link de comunicação já estiver totalmente criptografado no documento ou no nível de dados. " +
+			"Além disso, a comunicação intra-contêiner / pod pode ser considerada falsa positiva quando a plataforma de orquestração de contêineres lida com criptografia.neres lida com criptografia.",
 		ModelFailurePossibleReason: false,
 		CWE:                        319,
 	}
@@ -82,13 +82,13 @@ func createRisk(technicalAsset model.TechnicalAsset, dataFlow model.Communicatio
 		impact = model.HighImpact
 	}
 	target := model.ParsedModelRoot.TechnicalAssets[dataFlow.TargetId]
-	title := "<b>Unencrypted Communication</b> named <b>" + dataFlow.Title + "</b> between <b>" + technicalAsset.Title + "</b> and <b>" + target.Title + "</b>"
+	title := "<b>Comunicação não criptografada</b> nomeada <b>" + dataFlow.Title + "</b> entreb >" + technicalAsset.Title + "</b> e <b>" + target.Title + "</b>"
 	if transferringAuthData {
-		title += " transferring authentication data (like credentials, token, session-id, etc.)"
+		title += " transferindo dados de autenticação (like credentials, token, session-id, etc.)"
 	}
 	if dataFlow.VPN {
-		title += " (even VPN-protected connections need to encrypt their data in-transit when confidentiality is " +
-			"rated " + model.StrictlyConfidential.String() + " or integrity is rated " + model.MissionCritical.String() + ")"
+		title += " (Mesmo as conexões protegidas por VPN precisam criptografar seus dados em trânsito quando a confidencialidade é " +
+			"avaliada " + model.StrictlyConfidential.String() + " ou a integridade é avaliada " + model.MissionCritical.String() + ")"
 	}
 	likelihood := model.Unlikely
 	if dataFlow.IsAcrossTrustBoundaryNetworkOnly() {

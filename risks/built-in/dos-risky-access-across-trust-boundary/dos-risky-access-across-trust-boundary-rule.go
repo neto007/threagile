@@ -8,27 +8,27 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "dos-risky-access-across-trust-boundary",
 		Title: "DoS-risky Access Across Trust-Boundary",
-		Description: "Assets accessed across trust boundaries with critical or mission-critical availability rating " +
-			"are more prone to Denial-of-Service (DoS) risks.",
-		Impact:     "If this risk remains unmitigated, attackers might be able to disturb the availability of important parts of the system.",
+		Description: "Ativos acessados através dos limites de confiança com classificação de disponibilidade crítica ou de missão crítica " +
+			"estão mais sujeitos a riscos de negação de serviço (DoS).",
+		Impact:     "Se esse risco permanecer inalterado, os invasores podem perturbar a disponibilidade de partes importantes do sistema.",
 		ASVS:       "V1 - Architecture, Design and Threat Modeling Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Denial_of_Service_Cheat_Sheet.html",
 		Action:     "Anti-DoS Measures",
-		Mitigation: "Apply anti-DoS techniques like throttling and/or per-client load blocking with quotas. " +
-			"Also for maintenance access routes consider applying a VPN instead of public reachable interfaces. " +
-			"Generally applying redundancy on the targeted technical asset reduces the risk of DoS.",
-		Check:    "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation: "Aplique técnicas anti-DoS, como limitação e/ou bloqueio de carga por cliente com cotas. " +
+			"Também para rotas de acesso de manutenção, considere a aplicação de uma VPN em vez de interfaces acessíveis ao público. " +
+			"Geralmente, a aplicação de redundância no ativo técnico de destino reduz o risco de DoS.",
+		Check:    "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas? ",
 		Function: model.Operations,
 		STRIDE:   model.DenialOfService,
-		DetectionLogic: "In-scope technical assets (excluding " + model.LoadBalancer.String() + ") with " +
-			"availability rating of " + model.Critical.String() + " or higher which have incoming data-flows across a " +
-			"network trust-boundary (excluding " + model.DevOps.String() + " usage).",
-		RiskAssessment: "Matching technical assets with availability rating " +
-			"of " + model.Critical.String() + " or higher are " +
-			"at " + model.LowSeverity.String() + " risk. When the availability rating is " +
-			model.MissionCritical.String() + " and neither a VPN nor IP filter for the incoming data-flow nor redundancy " +
-			"for the asset is applied, the risk-rating is considered " + model.MediumSeverity.String() + ".", // TODO reduce also, when data-flow authenticated and encrypted?
-		FalsePositives:             "When the accessed target operations are not time- or resource-consuming.",
+		DetectionLogic: "Ativos técnicos dentro do escopo (excluding " + model.LoadBalancer.String() + ") com " +
+			"classificação de disponibilidade de " + model.Critical.String() + " ou superior, que tem fluxos de dados de entrada em um " +
+			"network trust-boundary (excluindo o uso do " + model.DevOps.String() + ").",
+		RiskAssessment: "Combinando ativos técnicos com classificação de disponibilidade " +
+			"do " + model.Critical.String() + " ou superiores são " +
+			"no " + model.LowSeverity.String() + " risco. Quando a classificação de disponibilidade é " +
+			model.MissionCritical.String() + " e nem uma VPN nem filtro IP para o fluxo de dados de entrada nem redundância " +
+			"para o ativo é aplicado, a classificação de risco é considerada " + model.MediumSeverity.String() + ".", // TODO reduce also, when data-flow authenticated and encrypted?
+		FalsePositives:             "Quando as operações de destino acessadas não consomem tempo ou recursos",
 		ModelFailurePossibleReason: false,
 		CWE:                        400,
 	}

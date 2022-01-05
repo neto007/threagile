@@ -8,19 +8,19 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "unnecessary-communication-link",
 		Title: "Unnecessary Communication Link",
-		Description: "When a technical communication link does not send or receive any data assets, this is " +
-			"an indicator for an unnecessary communication link (or for an incomplete model).",
-		Impact:                     "If this risk is unmitigated, attackers might be able to target unnecessary communication links.",
+		Description: "Quando um link de comunicação técnica não envia ou recebe quaisquer ativos de dados, isso é " +
+			"um indicador para um link de comunicação desnecessário (ou para um modelo incompleto).",
+		Impact:                     "Se esse risco não for mitigado, os invasores podem ser capazes de direcionar links de comunicação desnecessários.",
 		ASVS:                       "V1 - Architecture, Design and Threat Modeling Requirements",
 		CheatSheet:                 "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
-		Action:                     "Attack Surface Reduction",
-		Mitigation:                 "Try to avoid using technical communication links that do not send or receive anything.",
-		Check:                      "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Action:                     "Redução da superfície de ataque",
+		Mitigation:                 "Tente evitar usar links de comunicação técnica que não enviem ou recebam nada.",
+		Check:                      "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function:                   model.Architecture,
 		STRIDE:                     model.ElevationOfPrivilege,
-		DetectionLogic:             "In-scope technical assets' technical communication links not sending or receiving any data assets.",
+		DetectionLogic:             "Links técnicos de comunicação técnica de ativos técnicos no escopo não enviando ou recebendo quaisquer ativos de dados.",
 		RiskAssessment:             model.LowSeverity.String(),
-		FalsePositives:             "Usually no false positives as this looks like an incomplete model.",
+		FalsePositives:             "Geralmente não falsos positivos, pois isso parece um modelo incompleto.",
 		ModelFailurePossibleReason: true,
 		CWE:                        1008,
 	}
@@ -46,7 +46,7 @@ func GenerateRisks() []model.Risk {
 }
 
 func createRisk(technicalAsset model.TechnicalAsset, commLink model.CommunicationLink) model.Risk {
-	title := "<b>Unnecessary Communication Link</b> titled <b>" + commLink.Title + "</b> at technical asset <b>" + technicalAsset.Title + "</b>"
+	title := "<b>Link de comunicação desnecessária</b> intitulada <b>" + commLink.Title + "</b> no ativo técnico <b>" + technicalAsset.Title + "</b>"
 	risk := model.Risk{
 		Category:                        Category(),
 		Severity:                        model.CalculateSeverity(model.Unlikely, model.LowImpact),

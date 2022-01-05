@@ -8,24 +8,24 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "server-side-request-forgery",
 		Title: "Server-Side Request Forgery (SSRF)",
-		Description: "When a server system (i.e. not a client) is accessing other server systems via typical web protocols " +
-			"Server-Side Request Forgery (SSRF) or Local-File-Inclusion (LFI) or Remote-File-Inclusion (RFI) risks might arise. ",
-		Impact:     "If this risk is unmitigated, attackers might be able to access sensitive services or files of network-reachable components by modifying outgoing calls of affected components.",
+		Description: "Quando um sistema de servidor (i.e. não um cliente) está acessando outros sistemas de servidor via protocolos da Web típicos " +
+			"Server-Side Request Forgery (SSRF) ou Local-File-Inclusion (LFI) ou Remote-File-Inclusion (RFI) Os riscos podem surgir. ",
+		Impact:     "Se este risco for ignorado, os invasores poderão acessar serviços confidenciais ou arquivos de componentes acessíveis por rede, modificando chamadas de saída dos componentes afetados.",
 		ASVS:       "V12 - File and Resources Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html",
 		Action:     "SSRF Prevention",
-		Mitigation: "Try to avoid constructing the outgoing target URL with caller controllable values. Alternatively use a mapping (whitelist) when accessing outgoing URLs instead of creating them including caller " +
-			"controllable values. " +
-			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation: "Tente evitar a construção do URL de destino de saída com valores controláveis pelo chamador.Como alternativa, use um mapeamento (Whitelist) ao acessar URLs de saída em vez de criá-los, incluindo chamador " +
+			"Valores controláveis. " +
+			"Quando um produto de terceiros é usado em vez de um software desenvolvido sob medida, verifique se o produto aplica a atenuação adequada e garanta um nível de patch razoável.",
+		Check:          "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function:       model.Development,
 		STRIDE:         model.InformationDisclosure,
-		DetectionLogic: "In-scope non-client systems accessing (using outgoing communication links) targets with either HTTP or HTTPS protocol.",
-		RiskAssessment: "The risk rating (low or medium) depends on the sensitivity of the data assets receivable via web protocols from " +
-			"targets within the same network trust-boundary as well on the sensitivity of the data assets receivable via web protocols from the target asset itself. " +
-			"Also for cloud-based environments the exploitation impact is at least medium, as cloud backend services can be attacked via SSRF.",
-		FalsePositives: "Servers not sending outgoing web requests can be considered " +
-			"as false positives after review.",
+		DetectionLogic: "Sistemas não-cliente dentro do escopo que acessam (usando links de comunicação de saída) alvos com protocolo HTTP ou HTTPS.",
+		RiskAssessment: "A classificação de risco (baixo ou médio) depende da sensibilidade dos ativos de dados a receber via protocolos da web de " +
+			"alvos dentro do mesmo limite de confiança da rede, bem como sobre a sensibilidade dos ativos de dados recebidos por meio de protocolos da web do próprio ativo alvo. " +
+			"Além disso, para ambientes baseados em nuvem, o impacto da exploração é pelo menos médio, pois os serviços de back-end da nuvem podem ser atacados via SSRF. ",
+		FalsePositives: "Os servidores que não enviam solicitações da web de saída podem ser considerados " +
+			"como falsos positivos após revisão.",
 		ModelFailurePossibleReason: false,
 		CWE:                        918,
 	}

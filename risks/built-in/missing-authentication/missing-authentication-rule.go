@@ -8,22 +8,22 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:          "missing-authentication",
 		Title:       "Missing Authentication",
-		Description: "Technical assets (especially multi-tenant systems) should authenticate incoming requests when the asset processes or stores sensitive data. ",
-		Impact:      "If this risk is unmitigated, attackers might be able to access or modify sensitive data in an unauthenticated way.",
+		Description: "Ativos técnicos (especialmente sistemas multilocatários) devem autenticar as solicitações recebidas quando o ativo processa ou armazena dados confidenciais. ",
+		Impact:      "Se esse risco não for mitigado, os invasores poderão acessar ou modificar dados confidenciais de maneira não autenticada.",
 		ASVS:        "V2 - Authentication Verification Requirements",
 		CheatSheet:  "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
-		Action:      "Authentication of Incoming Requests",
-		Mitigation: "Apply an authentication method to the technical asset. To protect highly sensitive data consider " +
-			"the use of two-factor authentication for human users.",
-		Check:    "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Action:      "Autenticação de solicitações de entrada",
+		Mitigation: "Aplique um método de autenticação ao ativo técnico. Para proteger dados altamente confidenciais, considere " +
+			"o uso de autenticação de dois fatores para usuários humanos.",
+		Check:    "As recomendações da folha de dicas vinculada e do capítulo ASVS referenciado são aplicadas ?",
 		Function: model.Architecture,
 		STRIDE:   model.ElevationOfPrivilege,
-		DetectionLogic: "In-scope technical assets (except " + model.LoadBalancer.String() + ", " + model.ReverseProxy.String() + ", " + model.ServiceRegistry.String() + ", " + model.WAF.String() + ", " + model.IDS.String() + ", and " + model.IPS.String() + " and in-process calls) should authenticate incoming requests when the asset processes or stores " +
-			"sensitive data. This is especially the case for all multi-tenant assets (there even non-sensitive ones).",
-		RiskAssessment: "The risk rating (medium or high) " +
-			"depends on the sensitivity of the data sent across the communication link. Monitoring callers are exempted from this risk.",
-		FalsePositives: "Technical assets which do not process requests regarding functionality or data linked to end-users (customers) " +
-			"can be considered as false positives after individual review.",
+		DetectionLogic: "Ativos técnicos dentro do escopo (exceto " + model.LoadBalancer.String() + ", " + model.ReverseProxy.String() + ", " + model.ServiceRegistry.String() + ", " + model.WAF.String() + ", " + model.IDS.String() + ", e " + model.IPS.String() + " e chamadas em processo) devem autenticar as solicitações recebidas quando o ativo processa ou armazena " +
+			"dados sensíveis. Esse é especialmente o caso para todos os ativos multilocatários (mesmo aqueles não confidenciais).",
+		RiskAssessment: "A classificação de risco (médio ou alto) " +
+			"depende da sensibilidade dos dados enviados pelo link de comunicação. Os chamadores de monitoramento estão isentos desse risco.",
+		FalsePositives: "Ativos técnicos que não processam solicitações de funcionalidade ou dados vinculados aos usuários finais (clientes)" +
+			"podem ser considerados falsos positivos após revisão individual.",
 		ModelFailurePossibleReason: false,
 		CWE:                        306,
 	}

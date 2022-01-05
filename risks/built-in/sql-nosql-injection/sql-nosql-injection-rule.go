@@ -8,21 +8,21 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "sql-nosql-injection",
 		Title: "SQL/NoSQL-Injection",
-		Description: "When a database is accessed via database access protocols SQL/NoSQL-Injection risks might arise. " +
-			"The risk rating depends on the sensitivity technical asset itself and of the data assets processed or stored.",
-		Impact:     "If this risk is unmitigated, attackers might be able to modify SQL/NoSQL queries to steal and modify data and eventually further escalate towards a deeper system penetration via code executions.",
+		Description: "Quando um banco de dados é acessado por meio de protocolos de acesso ao banco de dados, podem surgir riscos de SQL / NoSQL-Injection. " +
+			"A classificação de risco depende do próprio ativo técnico de sensibilidade e dos ativos de dados processados ou armazenados.",
+		Impact:     "Se esse risco não for mitigado, os invasores podem modificar consultas SQL / NoSQL para roubar e modificar dados e, eventualmente, escalar ainda mais para uma penetração mais profunda no sistema por meio de execuções de código.",
 		ASVS:       "V5 - Validation, Sanitization and Encoding Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html",
 		Action:     "SQL/NoSQL-Injection Prevention",
-		Mitigation: "Try to use parameter binding to be safe from injection vulnerabilities. " +
-			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation: "Tente usar a vinculação de parâmetro para se proteger de vulnerabilidades de injeção. " +
+			"Quando um produto de terceiros é usado em vez de um software desenvolvido sob medida, verifique se o produto aplica a atenuação adequada e garanta um nível de patch razoável.",
+		Check:          "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function:       model.Development,
 		STRIDE:         model.Tampering,
-		DetectionLogic: "Database accessed via typical database access protocols by in-scope clients.",
-		RiskAssessment: "The risk rating depends on the sensitivity of the data stored inside the database.",
-		FalsePositives: "Database accesses by queries not consisting of parts controllable by the caller can be considered " +
-			"as false positives after individual review.",
+		DetectionLogic: "Banco de dados acessado por meio de protocolos de acesso a banco de dados típicos por clientes dentro do escopo. ",
+		RiskAssessment: "A classificação de risco depende da sensibilidade dos dados armazenados no banco de dados.",
+		FalsePositives: "Os acessos ao banco de dados por meio de consultas que não consistem em partes controláveis pelo chamador podem ser considerados " +
+			"como falsos positivos após revisão individual.",
 		ModelFailurePossibleReason: false,
 		CWE:                        89,
 	}

@@ -8,22 +8,22 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "missing-identity-store",
 		Title: "Missing Identity Store",
-		Description: "The modeled architecture does not contain an identity store, which might be the risk of a model missing " +
-			"critical assets (and thus not seeing their risks).",
-		Impact: "If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model in the identity provider/store " +
-			"that is currently missing in the model.",
+		Description: "A arquitetura modelada não contém um armazenamento de identidade, o que pode ser o risco de um modelo faltar " +
+			"ativos críticos (e, portanto, não vendo seus riscos).",
+		Impact: "Se este risco não for mitigado, os invasores podem ser capazes de explorar riscos não vistos neste modelo de ameaça no provedor / armazenamento de identidade " +
+			"que está faltando no modelo.",
 		ASVS:           "V2 - Authentication Verification Requirements",
 		CheatSheet:     "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html",
-		Action:         "Identity Store",
-		Mitigation:     "Include an identity store in the model if the application has a login.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Action:         "Loja de Identidade",
+		Mitigation:     "Inclui um armazenamento de identidade no modelo se o aplicativo tiver um login.",
+		Check:          "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function:       model.Architecture,
 		STRIDE:         model.Spoofing,
-		DetectionLogic: "Models with authenticated data-flows authorized via enduser-identity missing an in-scope identity store.",
-		RiskAssessment: "The risk rating depends on the sensitivity of the enduser-identity authorized technical assets and " +
-			"their data assets processed and stored.",
-		FalsePositives: "Models only offering data/services without any real authentication need " +
-			"can be considered as false positives after individual review.",
+		DetectionLogic: "Modelos com fluxos de dados autenticados autorizados por meio da identidade do usuário final sem um armazenamento de identidade dentro do escopo.",
+		RiskAssessment: "A classificação de risco depende da sensibilidade dos ativos técnicos autorizados de identidade do usuário final e " +
+			"seus ativos de dados processados e armazenados. ",
+		FalsePositives: "Modelos que oferecem apenas dados / serviços sem nenhuma necessidade real de autenticação " +
+			"podem ser considerados falsos positivos após revisão individual.",
 		ModelFailurePossibleReason: true,
 		CWE:                        287,
 	}

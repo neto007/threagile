@@ -1,1 +1,1 @@
-docker run --rm -it threagile/threagile "$@"
+docker run --rm -it threagile "$@"

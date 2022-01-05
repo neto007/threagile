@@ -8,25 +8,25 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "search-query-injection",
 		Title: "Search-Query Injection",
-		Description: "When a search engine server is accessed Search-Query Injection risks might arise." +
-			"<br><br>See for example <a href=\"https://github.com/veracode-research/solr-injection\">https://github.com/veracode-research/solr-injection</a> and " +
+		Description: "Quando um servidor de mecanismo de pesquisa é acessado, os riscos de injeção de consulta de pesquisa podem surgir." +
+			"<br><br>Veja por exemploo <a href=\"https://github.com/veracode-research/solr-injection\">https://github.com/veracode-research/solr-injection</a> e " +
 			"<a href=\"https://github.com/veracode-research/solr-injection/blob/master/slides/DEFCON-27-Michael-Stepankin-Apache-Solr-Injection.pdf\">https://github.com/veracode-research/solr-injection/blob/master/slides/DEFCON-27-Michael-Stepankin-Apache-Solr-Injection.pdf</a> " +
-			"for more details (here related to Solr, but in general showcasing the topic of search query injections).",
-		Impact: "If this risk remains unmitigated, attackers might be able to read more data from the search index and " +
-			"eventually further escalate towards a deeper system penetration via code executions.",
+			"Para mais detalhes (aqui relacionados ao Solr, mas em geral, mostrando o tópico das injeções de consulta de pesquisa).",
+		Impact: "Se este risco permanecer desconhecido, os invasores podem ser capazes de ler mais dados do índice de pesquisa e " +
+			"eventualmente, escalar ainda mais para uma penetração mais profunda no sistema por meio de execuções de código.",
 		ASVS:       "V5 - Validation, Sanitization and Encoding Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Injection_Prevention_Cheat_Sheet.html",
 		Action:     "Search-Query Injection Prevention",
-		Mitigation: "Try to use libraries that properly encode search query meta characters in searches and don't expose the " +
-			"query unfiltered to the caller. " +
-			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation: "Tente usar bibliotecas que codifiquem corretamente os metacaracteres de consulta de pesquisa em pesquisas e não exponha o " +
+			"consulta não filtrada para o chamador. " +
+			"Quando um produto de terceiros é usado em vez de um software desenvolvido sob medida, verifique se o produto aplica a atenuação adequada e garanta um nível de patch razoável.",
+		Check:          "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function:       model.Development,
 		STRIDE:         model.Tampering,
-		DetectionLogic: "In-scope clients accessing search engine servers via typical search access protocols.",
-		RiskAssessment: "The risk rating depends on the sensitivity of the search engine server itself and of the data assets processed or stored.",
-		FalsePositives: "Server engine queries by search values not consisting of parts controllable by the caller can be considered " +
-			"as false positives after individual review.",
+		DetectionLogic: "Clientes dentro do escopo acessando servidores de mecanismo de pesquisa por meio de protocolos de acesso de pesquisa típicos.",
+		RiskAssessment: "A classificação de risco depende da sensibilidade do próprio servidor do mecanismo de pesquisa e dos ativos de dados processados ou armazenados.",
+		FalsePositives: "As consultas do motor do servidor por valores de pesquisa que não consistem em partes controláveis pelo chamador podem ser consideradas " +
+			"como falsos positivos após revisão individual.",
 		ModelFailurePossibleReason: false,
 		CWE:                        74,
 	}

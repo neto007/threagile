@@ -8,23 +8,23 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "missing-vault",
 		Title: "Missing Vault (Secret Storage)",
-		Description: "In order to avoid the risk of secret leakage via config files (when attacked through vulnerabilities being able to " +
-			"read files like Path-Traversal and others), it is best practice to use a separate hardened process with proper authentication, " +
-			"authorization, and audit logging to access config secrets (like credentials, private keys, client certificates, etc.). " +
+		Description: "A fim de evitar o risco de vazamento de segredos por meio de arquivos de configuração (quando atacado por vulnerabilidades sendo capaz de " +
+			"ler arquivos como Path-Traversal e outros), é uma prática recomendada usar um processo protegido separado com autenticação adequada, " +
+			"autorização e registro de auditoria para acessar segredos de configuração (como credenciais, chaves privadas, certificados de cliente, etc.). " +
 			"This component is usually some kind of Vault.",
 		Impact: "If this risk is unmitigated, attackers might be able to easier steal config secrets (like credentials, private keys, client certificates, etc.) once " +
-			"a vulnerability to access files is present and exploited.",
+			"Este componente é geralmente algum tipo de Vault.",
 		ASVS:           "V6 - Stored Cryptography Verification Requirements",
 		CheatSheet:     "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html",
 		Action:         "Vault (Secret Storage)",
-		Mitigation:     "Consider using a Vault (Secret Storage) to securely store and access config secrets (like credentials, private keys, client certificates, etc.).",
-		Check:          "Is a Vault (Secret Storage) in place?",
+		Mitigation:     "Considere o uso de um Vault (armazenamento secreto) para armazenar e acessar segredos de configuração com segurança (como credenciais, chaves privadas, certificados de cliente, etc.).",
+		Check:          "Existe um Vault (armazenamento secreto)?",
 		Function:       model.Architecture,
 		STRIDE:         model.InformationDisclosure,
-		DetectionLogic: "Models without a Vault (Secret Storage).",
-		RiskAssessment: "The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed and stored.",
-		FalsePositives: "Models where no technical assets have any kind of sensitive config data to protect " +
-			"can be considered as false positives after individual review.",
+		DetectionLogic: "Modelos sem cofre (armazenamento secreto).",
+		RiskAssessment: "A classificação de risco depende da sensibilidade do próprio ativo técnico e dos ativos de dados processados e armazenados.",
+		FalsePositives: "Modelos em que nenhum recurso técnico tem qualquer tipo de dados de configuração confidenciais para proteger " +
+			"podem ser considerados falsos positivos após revisão individual.",
 		ModelFailurePossibleReason: true,
 		CWE:                        522,
 	}

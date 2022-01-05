@@ -8,29 +8,29 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "code-backdooring",
 		Title: "Code Backdooring",
-		Description: "For each build-pipeline component Code Backdooring risks might arise where attackers compromise the build-pipeline " +
-			"in order to let backdoored artifacts be shipped into production. Aside from direct code backdooring this includes " +
-			"backdooring of dependencies and even of more lower-level build infrastructure, like backdooring compilers (similar to what the XcodeGhost malware did) or dependencies.",
-		Impact: "If this risk remains unmitigated, attackers might be able to execute code on and completely takeover " +
-			"production environments.",
+		Description: "Para cada componente do pipeline de compilaçao, podem surgir riscos de backdooring onde os invasores comprometem o pipeline de compilcão " +
+			"para permitir que artefatos de backdooring sejam enviados para a produção Além do codigo direto, isso incluir " +
+			"backdooring de dependencias e até de mesmo  de infraestrutura de compilação baixo nivel.",
+		Impact: "Se este risco permanecer inalterado, os invasores podem ser capazes de executar o código e assumir o controle completamente " +
+			"ambientes de produção.",
 		ASVS:       "V10 - Malicious Code Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html",
 		Action:     "Build Pipeline Hardening",
-		Mitigation: "Reduce the attack surface of backdooring the build pipeline by not directly exposing the build pipeline " +
-			"components on the public internet and also not exposing it in front of unmanaged (out-of-scope) developer clients." +
-			"Also consider the use of code signing to prevent code modifications.",
-		Check:    "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation: "Reduza a superfície de ataque de backdoor do pipeline de construção, não expondo diretamente o pipeline de construção " +
+			"componentes na Internet pública e também não os expõe na frente de clientes de desenvolvedor não gerenciados (fora do escopo)." +
+			"Considere também o uso de assinatura de código para evitar modificações no código.",
+		Check:    "As recomendações do cheat sheet e do capítulo ASVS referenciado são aplicadas?",
 		Function: model.Operations,
 		STRIDE:   model.Tampering,
-		DetectionLogic: "In-scope development relevant technical assets which are either accessed by out-of-scope unmanaged " +
-			"developer clients and/or are directly accessed by any kind of internet-located (non-VPN) component or are themselves directly located " +
-			"on the internet.",
-		RiskAssessment: "The risk rating depends on the confidentiality and integrity rating of the code being handled and deployed " +
-			"as well as the placement/calling of this technical asset on/from the internet.", // TODO also take the CIA rating of the deployment targets (and their data) into account?
-		FalsePositives: "When the build-pipeline and sourcecode-repo is not exposed to the internet and considered fully " +
-			"trusted (which implies that all accessing clients are also considered fully trusted in terms of their patch management " +
-			"and applied hardening, which must be equivalent to a managed developer client environment) this can be considered a false positive " +
-			"after individual review.",
+		DetectionLogic: "Ativos técnicos relevantes de desenvolvimento dentro do escopo que são acessados por fora do escopo não gerenciado " +
+			"clientes desenvolvedores e / ou são acessados diretamente por qualquer tipo de componente localizado na Internet (não VPN) ou eles próprios estão localizados diretamente " +
+			"na internet.",
+		RiskAssessment: "A classificação de risco depende da classificação de confidencialidade e integridade do código que está sendo manuseado e implantado " +
+			"bem como a colocação/chamada deste ativo técnico na / da internet.", // TODO also take the CIA rating of the deployment targets (and their data) into account?
+		FalsePositives: "Quando o build-pipeline e o sourcecode-repo não são expostos à Internet e considerados totalmente " +
+			"confiável (o que implica que todos os clientes que acessam também são considerados totalmente confiáveis em termos de gerenciamento de patches " +
+			"e proteção aplicada, que deve ser equivalente a um ambiente de cliente desenvolvedor gerenciado), isso pode ser considerado um falso positivo " +
+			"após revisão individual.",
 		ModelFailurePossibleReason: false,
 		CWE:                        912,
 	}

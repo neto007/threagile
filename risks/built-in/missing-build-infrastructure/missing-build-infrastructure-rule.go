@@ -8,24 +8,24 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "missing-build-infrastructure",
 		Title: "Missing Build Infrastructure",
-		Description: "The modeled architecture does not contain a build infrastructure (devops-client, sourcecode-repo, build-pipeline, etc.), " +
-			"which might be the risk of a model missing critical assets (and thus not seeing their risks). " +
-			"If the architecture contains custom-developed parts, the pipeline where code gets developed " +
-			"and built needs to be part of the model.",
-		Impact: "If this risk is unmitigated, attackers might be able to exploit risks unseen in this threat model due to " +
-			"critical build infrastructure components missing in the model.",
+		Description: "A arquitetura modelada não contém uma infraestrutura de construção (devops-client, sourcecode-repo, build-pipeline, etc.), " +
+			"o que pode ser o risco de um modelo perder ativos críticos (e, portanto, não ver seus riscos). " +
+			"Se a arquitetura contém partes desenvolvidas de forma personalizada, o pipeline onde o código é desenvolvido " +
+			"e construído precisa fazer parte do modelo.",
+		Impact: "Se este risco não for mitigado, os invasores podem explorar riscos não vistos neste modelo de ameaça devido ao " +
+			"componentes críticos de infraestrutura de construção ausentes no modelo",
 		ASVS:       "V1 - Architecture, Design and Threat Modeling Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
-		Action:     "Build Pipeline Hardening",
-		Mitigation: "Include the build infrastructure in the model.",
-		Check:      "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Action:     "Construir enrijecimento de dutos",
+		Mitigation: "Inclui a infraestrutura de construção no modelo.",
+		Check:      "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function:   model.Architecture,
 		STRIDE:     model.Tampering,
-		DetectionLogic: "Models with in-scope custom-developed parts missing in-scope development (code creation) and build infrastructure " +
-			"components (devops-client, sourcecode-repo, build-pipeline, etc.).",
-		RiskAssessment: "The risk rating depends on the highest sensitivity of the in-scope assets running custom-developed parts.",
-		FalsePositives: "Models not having any custom-developed parts " +
-			"can be considered as false positives after individual review.",
+		DetectionLogic: "Modelos com partes desenvolvidas personalizadas no escopo sem desenvolvimento no escopo (criação de código) e infraestrutura de construção " +
+			"componentes (devops-client, sourcecode-repo, build-pipeline, etc.).",
+		RiskAssessment: "A classificação de risco depende da sensibilidade mais alta dos ativos no escopo que executam peças desenvolvidas de maneira personalizada.",
+		FalsePositives: "Modelos sem peças desenvolvidas sob medida " +
+			"podem ser considerados falsos positivos após revisão individual.",
 		ModelFailurePossibleReason: true,
 		CWE:                        1127,
 	}

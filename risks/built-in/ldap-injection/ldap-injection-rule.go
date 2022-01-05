@@ -8,22 +8,22 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "ldap-injection",
 		Title: "LDAP-Injection",
-		Description: "When an LDAP server is accessed LDAP-Injection risks might arise. " +
-			"The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed or stored.",
-		Impact:     "If this risk remains unmitigated, attackers might be able to modify LDAP queries and access more data from the LDAP server than allowed.",
+		Description: "Quando um servidor LDAP é acessado, podem surgir riscos de injeção de LDAP. " +
+			"A classificação de risco depende da sensibilidade do próprio servidor LDAP e dos ativos de dados processados ou armazenados.",
+		Impact:     "Se esse risco permanecer inalterado, os invasores podem modificar as consultas LDAP e acessar mais dados do servidor LDAP do que o permitido.",
 		ASVS:       "V5 - Validation, Sanitization and Encoding Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html",
 		Action:     "LDAP-Injection Prevention",
-		Mitigation: "Try to use libraries that properly encode LDAP meta characters in searches and queries to access " +
-			"the LDAP sever in order to stay safe from LDAP-Injection vulnerabilities. " +
-			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation: "Tente usar bibliotecas que codificam corretamente os metacaracteres LDAP em pesquisas e consultas para acessar " +
+			"o servidor LDAP para ficar protegido contra vulnerabilidades de injeção de LDAP. " +
+			"Quando um produto de terceiros é usado em vez de um software desenvolvido sob medida, verifique se o produto aplica a atenuação adequada e garanta um nível de patch razoável.",
+		Check:          "As recomendações da folha de dicas vinculada e do capítulo ASVS referenciado são aplicadas ?",
 		Function:       model.Development,
 		STRIDE:         model.Tampering,
-		DetectionLogic: "In-scope clients accessing LDAP servers via typical LDAP access protocols.",
-		RiskAssessment: "The risk rating depends on the sensitivity of the LDAP server itself and of the data assets processed or stored.",
-		FalsePositives: "LDAP server queries by search values not consisting of parts controllable by the caller can be considered " +
-			"as false positives after individual review.",
+		DetectionLogic: "Clientes dentro do escopo acessando servidores LDAP por meio de protocolos de acesso LDAP típicos.",
+		RiskAssessment: "A classificação de risco depende da sensibilidade do próprio servidor LDAP e dos ativos de dados processados ou armazenados.",
+		FalsePositives: "As consultas do servidor LDAP por valores de pesquisa que não consistem em partes controláveis pelo chamador podem ser consideradas " +
+			"como falsos positivos após revisão individual.",
 		ModelFailurePossibleReason: false,
 		CWE:                        90,
 	}

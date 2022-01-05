@@ -1,0 +1,266 @@
+threagile_version: 1.0.0
+
+title: Minha Application exemplo
+
+date: 2020-07-01
+
+author:
+  name: Salvador Dilio Neto
+  homepage: www.myhome.com
+
+
+
+
+management_summary_comment: >
+  Aplicação personalizada para exemplo.
+
+business_criticality: important # values: archive, operational, important, critical, mission-critical
+
+
+
+
+business_overview:
+  description:  aplicaçao para cadastro de venda
+  images:
+#    - custom-image-1.png: Some dummy image 1
+#    - custom-image-2.png: Some dummy image 2
+
+
+technical_overview:
+  description: utiliza linguagem node.js 
+  images:
+#    - custom-image-1.png: Some dummy image 1
+#    - custom-image-2.png: Some dummy image 2
+
+
+
+questions: # simply use "" as answer to signal "unanswered"
+  Como os clientes admin são gerenciados/protegidos contra comprometimento?: >
+    não tenho uma respota ainda
+  Como os clientes de desenvolvimento são gerenciados/protegidos contra comprometimento?: >
+    ainda vou perguntar
+  Como os componentes do pipeline de construção são gerenciados/protegidos contra comprometimento?: >
+    equipe com falta de conhecimento
+
+
+
+abuse_cases:
+  Denial-of-Service: >
+    Como um hacker, quero perturbar a funcionalidade do sistema de back-end para causar danos indiretos
+    danos financeiros por meio de recursos inutilizáveis.
+  Denial-of-Service of ERP/DB Functionality: >
+    Como um hacker, eu quero atrapalhar a funcionalidade do sistema ERP e / ou seu banco de dados para causar danos indiretos
+    danos financeiros por meio de recursos internos de ERP inutilizáveis ​​(não relacionados ao portal do cliente).
+  Teste-de-caso: >
+    não sei o que vai a acontecer  
+
+
+security_requirements:
+  Input Validation: É necessária uma validação de entrada estrita para reduzir a superfície de ataque geral.
+  Securing Administrative Access: O acesso administrativo deve ser protegido com criptografia forte e autenticação multifator.
+  Proteção de Dados: Mandatory LGPD
+
+
+
+
+# Tags can be used for anything, it's just a tag. Also risk rules can act based on tags if you like.
+# Tags can be used for example to name the products used (which is more concrete than the technology types that only specify the type)
+tags_available:
+  - some-tag
+  - some-other-tag
+
+data_assets:
+
+  Some Data Asset:
+    id: some-data
+    description: Some Description
+    usage: business # values: business, devops
+    tags:
+    origin: Some Origin
+    owner: Some Owner
+    quantity: many # values: very-few, few, many, very-many
+    confidentiality: confidential # values: public, internal, restricted, confidential, strictly-confidential
+    integrity: critical # values: archive, operational, important, critical, mission-critical
+    availability: operational # values: archive, operational, important, critical, mission-critical
+    justification_cia_rating: Some Justification
+
+
+
+technical_assets:
+
+  Servidor Apache :
+    id: server-apache
+    description: Servidor web de aplicação.
+    type: process # values: external-entity, process, datastore
+    usage: business # values: business, devops
+    used_as_client_by_human: false
+    out_of_scope: false
+    justification_out_of_scope:
+    size: component # values: system, service, application, component
+    technology: web-service-rest # values: see help
+    tags:
+      - some-tag
+      - some-other-tag
+    internet: false
+    machine: virtual # values: physical, virtual, container, serverless
+    encryption: none # values: none, transparent, data-with-symmetric-shared-key, data-with-asymmetric-shared-key, data-with-enduser-individual-key
+    owner: Some Owner
+    confidentiality: confidential # values: public, internal, restricted, confidential, strictly-confidential
+    integrity: critical # values: archive, operational, important, critical, mission-critical
+    availability: critical # values: archive, operational, important, critical, mission-critical
+    justification_cia_rating: Some Justification
+    multi_tenant: false
+    redundant: false
+    custom_developed_parts: true
+    data_assets_processed: # sequence of IDs to reference
+      - some-data
+    data_assets_stored: # sequence of IDs to reference
+    data_formats_accepted: # sequence of formats like: json, xml, serialization, file, csv
+      - xml
+    communication_links:
+      Database Traffic:
+        target: database-app-examplo
+        description: link para database
+        protocol: https # values: see help
+        authentication: token # values: none, credentials, session-id, token, client-certificate, two-factor
+        authorization: none # values: none, technical-user, enduser-identity-propagation
+        tags:
+        vpn: false
+        ip_filtered: true
+        readonly: false
+        usage: devops # values: business, devops
+        data_assets_sent: # sequence of IDs to reference
+          - some-data
+        data_assets_received: # sequence of IDs to reference
+
+
+  Mongodb:
+    id: database-app-examplo
+    description: Some Description
+    type: process # values: external-entity, process, datastore
+    usage: business # values: business, devops
+    used_as_client_by_human: false
+    out_of_scope: false
+    justification_out_of_scope:
+    size: application # values: system, service, application, component
+    technology: database # values: see help
+    tags:
+      - some-tag
+      - some-other-tag
+    internet: false
+    machine: container # values: physical, virtual, container, serverless
+    encryption: transparent # values: none, transparent, data-with-symmetric-shared-key, data-with-asymmetric-shared-key, data-with-enduser-individual-key
+    owner: operação
+    confidentiality: confidential # values: public, internal, restricted, confidential, strictly-confidential
+    integrity: critical # values: archive, operational, important, critical, mission-critical
+    availability: critical # values: archive, operational, important, critical, mission-critical
+    justification_cia_rating: Some Justification
+    multi_tenant: false
+    redundant: true
+    custom_developed_parts: false
+    data_assets_sent: # sequence of IDs to reference
+      - some-data
+    data_assets_processed: # sequence of IDs to reference
+    data_assets_stored:
+    data_assets_received:
+    data_formats_accepted: # sequence of formats like: json, xml, serialization, file, csv
+      - json
+    communication_links:
+
+
+
+trust_boundaries:
+
+  Rede Privada AWS:
+    id: server-private
+    description: Rede privada de Servidores
+    type: network-dedicated-hoster # values: see help
+    tags:
+    technical_assets_inside: # sequence of IDs to reference
+      - server-apache
+      - database-app-examplo 
+    trust_boundaries_nested: # sequence of IDs to reference
+
+
+
+
+
+shared_runtimes:
+
+  Some Shared Runtime:
+    id: some-runtime
+    description: Some Description
+    tags:
+    technical_assets_running: # sequence of IDs to reference
+      - server-apache
+      - database-app-examplo
+
+
+
+
+individual_risk_categories: # used for adding custom manually identified risks
+
+  Some Individual Risk Example:
+    id: something-strange
+    description: Some text describing the risk category...
+    impact: Some text describing the impact...
+    asvs: V0 - Something Strange
+    cheat_sheet: https://example.com
+    action: Some text describing the action...
+    mitigation: Some text describing the mitigation...
+    check: Check if XYZ...
+    function: business-side # values: business-side, architecture, development, operations
+    stride: repudiation # values: spoofing, tampering, repudiation, information-disclosure, denial-of-service, elevation-of-privilege
+    detection_logic: Some text describing the detection logic...
+    risk_assessment: Some text describing the risk assessment...
+    false_positives: Some text describing the most common types of false positives...
+    model_failure_possible_reason: false
+    cwe: 693
+    risks_identified:
+      <b>Example Individual Risk</b> at <b>Some Technical Asset</b>:
+        severity: critical # values: low, medium, elevated, high, critical
+        exploitation_likelihood: likely # values: unlikely, likely, very-likely, frequent
+        exploitation_impact: medium # values: low, medium, high, very-high
+        data_breach_probability: probable # values: improbable, possible, probable
+        data_breach_technical_assets: # list of technical asset IDs which might have data breach
+          - server-apache
+        most_relevant_data_asset:
+        most_relevant_technical_asset: server-apache
+        most_relevant_communication_link:
+        most_relevant_trust_boundary:
+        most_relevant_shared_runtime:
+
+
+
+
+# NOTE:
+# For risk tracking each risk-id needs to be defined (the string with the @ sign in it). These unique risk IDs
+# are visible in the PDF report (the small grey string under each risk), the Excel (column "ID"), as well as the JSON responses.
+# Some risk IDs have only one @ sign in them, while others multiple. The idea is to allow for unique but still speaking IDs.
+# Therefore each risk instance creates its individual ID by taking all affected elements causing the risk to be within an @-delimited part.
+# Using wildcards (the * sign) for parts delimited by @ signs allows to handle groups of certain risks at once. Best is to lookup the IDs
+# to use in the created Excel file. Alternatively a model macro "seed-risk-tracking" is available that helps in initially
+# seeding the risk tracking part here based on already identified and not yet handled risks.
+risk_tracking:
+
+  unencrypted-asset@server-apache: # wildcards "*" between the @ characters are possible
+    status: mitigated # values: unchecked, in-discussion, accepted, in-progress, mitigated, false-positive
+    justification: private network
+    ticket: XYZ-1234
+    date: 2020-01-04
+    checked_by: Salvador
+
+
+
+#diagram_tweak_edge_layout: spline # values: spline, polyline, false, ortho (this suppresses edge labels), curved (this suppresses edge labels and can cause problems with edges)
+
+#diagram_tweak_suppress_edge_labels: true
+#diagram_tweak_layout_left_to_right: true
+#diagram_tweak_nodesep: 2
+#diagram_tweak_ranksep: 2
+#diagram_tweak_invisible_connections_between_assets:
+#  - tech-asset-source-id-A:tech-asset-target-id-B
+#  - tech-asset-source-id-C:tech-asset-target-id-D
+#diagram_tweak_same_rank_assets:
+#  - tech-asset-source-id-E:tech-asset-target-id-F:tech-asset-source-id-G:tech-asset-target-id-H
+#  - tech-asset-source-id-M:tech-asset-target-id-N:tech-asset-source-id-O

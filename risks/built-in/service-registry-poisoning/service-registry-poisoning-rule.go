@@ -8,21 +8,21 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:          "service-registry-poisoning",
 		Title:       "Service Registry Poisoning",
-		Description: "When a service registry used for discovery of trusted service endpoints Service Registry Poisoning risks might arise.",
-		Impact: "If this risk remains unmitigated, attackers might be able to poison the service registry with malicious service endpoints or " +
-			"malicious lookup and config data leading to breach of sensitive data.",
+		Description: "Quando um registro de serviço usado para descoberta de pontos de extremidade de serviço confiáveis, podem surgir riscos de envenenamento de registro de serviço.",
+		Impact: "Se esse risco permanecer inalterado, os invasores podem envenenar o registro do serviço com pontos de extremidade de serviço mal-intencionados ou " +
+			"consulta maliciosa e dados de configuração que levam à violação de dados confidenciais.",
 		ASVS:           "V10 - Malicious Code Verification Requirements",
 		CheatSheet:     "https://cheatsheetseries.owasp.org/cheatsheets/Access_Control_Cheat_Sheet.html",
 		Action:         "Service Registry Integrity Check",
-		Mitigation:     "Try to strengthen the access control of the service registry and apply cross-checks to detect maliciously poisoned lookup data.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation:     "Tente fortalecer o controle de acesso do registro de serviço e aplicar verificações cruzadas para detectar dados de pesquisa envenenados de forma mal-intencionada.",
+		Check:          "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function:       model.Architecture,
 		STRIDE:         model.Spoofing,
-		DetectionLogic: "In-scope service registries.",
-		RiskAssessment: "The risk rating depends on the sensitivity of the technical assets accessing the service registry " +
-			"as well as the data assets processed or stored.",
-		FalsePositives: "Service registries not used for service discovery " +
-			"can be considered as false positives after individual review.",
+		DetectionLogic: "Registros de serviço dentro do escopo.",
+		RiskAssessment: "A classificação de risco depende da sensibilidade dos ativos técnicos que acessam o registro de serviços " +
+			"bem como os ativos de dados processados ou armazenados.",
+		FalsePositives: "Registros de serviço não usados para descoberta de serviço " +
+			"podem ser considerados falsos positivos após revisão individual.",
 		ModelFailurePossibleReason: false,
 		CWE:                        693,
 	}

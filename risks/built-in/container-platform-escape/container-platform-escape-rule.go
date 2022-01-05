@@ -8,29 +8,29 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "container-platform-escape",
 		Title: "Container Platform Escape",
-		Description: "Container platforms are especially interesting targets for attackers as they host big parts of a containerized runtime infrastructure. " +
-			"When not configured and operated with security best practices in mind, attackers might exploit a vulnerability inside an container and escape towards " +
-			"the platform as highly privileged users. These scenarios might give attackers capabilities to attack every other container as owning the container platform " +
-			"(via container escape attacks) equals to owning every container.",
-		Impact: "If this risk is unmitigated, attackers which have successfully compromised a container (via other vulnerabilities) " +
-			"might be able to deeply persist in the target system by executing code in many deployed containers " +
-			"and the container platform itself.",
+		Description: "As plataformas de contêiner são alvos especialmente interessantes para invasores, pois hospedam grandes partes de uma infraestrutura de tempo de execução em contêiner. " +
+			"Quando não configurados e operados com as melhores práticas de segurança em mente, os invasores podem explorar uma vulnerabilidade dentro de um contêiner e escapar em direção " +
+			"a plataforma como usuários altamente privilegiados. Esses cenários podem dar aos invasores recursos para atacar todos os outros contêineres como proprietários da plataforma de contêiner " +
+			"(por meio de ataques de escape de contêiner) é igual a possuir todos os contêineres.",
+		Impact: "Se este risco não for mitigado, os invasores que comprometeram um contêiner com sucesso (por meio de outras vulnerabilidades) " +
+			"pode ser capaz de persistir profundamente no sistema de destino, executando o código em muitos contêineres implantados " +
+			"e a própria plataforma de contêiner.",
 		ASVS:       "V14 - Configuration Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html",
 		Action:     "Container Infrastructure Hardening",
-		Mitigation: "Apply hardening of all container infrastructures. " +
-			"<p>See for example the <i>CIS-Benchmarks for Docker and Kubernetes</i> " +
-			"as well as the <i>Docker Bench for Security</i> ( <a href=\"https://github.com/docker/docker-bench-security\">https://github.com/docker/docker-bench-security</a> ) " +
-			"or <i>InSpec Checks for Docker and Kubernetes</i> ( <a href=\"https://github.com/dev-sec/cis-kubernetes-benchmark\">https://github.com/dev-sec/cis-docker-benchmark</a> and <a href=\"https://github.com/dev-sec/cis-kubernetes-benchmark\">https://github.com/dev-sec/cis-kubernetes-benchmark</a> ). " +
-			"Use only trusted base images, verify digital signatures and apply image creation best practices. Also consider using Google's <b>Distroless</i> base images or otherwise very small base images. " +
-			"Apply namespace isolation and nod affinity to separate pods from each other in terms of access and nodes the same style as you separate data.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS or CSVS chapter applied?",
+		Mitigation: "Aplicar hardening para todos os container da infrastrutura. " +
+			"<p> Veja, por exemplo, os <i> CIS-Benchmarks para Docker e Kubernetes </i> " +
+			"bem como o <i>Docker Bench for Security</i> ( <a href=\"https://github.com/docker/docker-bench-security\">https://github.com/docker/docker-bench-security</a> ) " +
+			"ou <i>Verificações InSpec para Docker e Kubernetes</i> ( <a href=\"https://github.com/dev-sec/cis-kubernetes-benchmark\">https://github.com/dev-sec/cis-docker-benchmark</a> e <a href=\"https://github.com/dev-sec/cis-kubernetes-benchmark\">https://github.com/dev-sec/cis-kubernetes-benchmark</a> ). " +
+			"Use apenas imagens de base confiáveis, verifique as assinaturas digitais e aplique as melhores práticas de criação de imagens. Considere também o uso de imagens de base <b> Distroless </i> do Google ou de outras imagens de base muito pequenas. " +
+			"Aplique isolamento de namespace e afinidade de nod para separar pods uns dos outros em termos de acesso e nós do mesmo estilo que você separa dados.",
+		Check:          "As recomendações da folha de dicas vinculada e do capítulo ASVS referenciado são aplicadas?",
 		Function:       model.Operations,
 		STRIDE:         model.ElevationOfPrivilege,
 		DetectionLogic: "In-scope container platforms.",
-		RiskAssessment: "The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed and stored.",
-		FalsePositives: "Container platforms not running parts of the target architecture can be considered " +
-			"as false positives after individual review.",
+		RiskAssessment: "A classificação de risco depende da sensibilidade do próprio ativo técnico e dos ativos de dados processados e armazenados.",
+		FalsePositives: "Plataformas de contêiner que não executam partes da arquitetura de destino podem ser consideradas " +
+			"como falsos positivos após revisão individual.",
 		ModelFailurePossibleReason: false,
 		CWE:                        1008,
 	}

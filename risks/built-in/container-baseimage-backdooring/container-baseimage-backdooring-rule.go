@@ -8,24 +8,24 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "container-baseimage-backdooring",
 		Title: "Container Base Image Backdooring",
-		Description: "When a technical asset is built using container technologies, Base Image Backdooring risks might arise where " +
-			"base images and other layers used contain vulnerable components or backdoors." +
-			"<br><br>See for example: <a href=\"https://techcrunch.com/2018/06/15/tainted-crypto-mining-containers-pulled-from-docker-hub/\">https://techcrunch.com/2018/06/15/tainted-crypto-mining-containers-pulled-from-docker-hub/</a>",
-		Impact:     "If this risk is unmitigated, attackers might be able to deeply persist in the target system by executing code in deployed containers.",
+		Description: "Quando um ativo técnico é construído usando tecnologias de contêiner, os riscos de backdooring da imagem de base podem surgir onde " +
+			"imagens de base e outras camadas usadas contêm componentes vulneráveis ou backdoors." +
+			"<br><br>por example: <a href=\"https://techcrunch.com/2018/06/15/tainted-crypto-mining-containers-pulled-from-docker-hub/\">https://techcrunch.com/2018/06/15/tainted-crypto-mining-containers-pulled-from-docker-hub/</a>",
+		Impact:     "Se esse risco não for mitigado, os invasores podem persistir profundamente no sistema de destino, executando o código em contêineres implantados.",
 		ASVS:       "V10 - Malicious Code Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html",
 		Action:     "Container Infrastructure Hardening",
-		Mitigation: "Apply hardening of all container infrastructures (see for example the <i>CIS-Benchmarks for Docker and Kubernetes</i> and the <i>Docker Bench for Security</i>). " +
-			"Use only trusted base images of the original vendors, verify digital signatures and apply image creation best practices. " +
-			"Also consider using Google's <i>Distroless</i> base images or otherwise very small base images. " +
-			"Regularly execute container image scans with tools checking the layers for vulnerable components.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS/CSVS applied?",
+		Mitigation: "Aplique a proteção de todas as infraestruturas de contêiner (consulte, por exemplo, os <i> CIS-Benchmarks para Docker e Kubernetes </i> e o <i> Docker Bench para Segurança </i>). " +
+			"Use apenas imagens de base confiáveis dos fornecedores originais, verifique as assinaturas digitais e aplique as melhores práticas de criação de imagens. " +
+			"Considere também o uso de imagens de base <i> Distroless </i> do Google ou imagens de base muito pequenas. " +
+			"Execute regularmente varreduras de imagens de contêiner com ferramentas que verificam as camadas em busca de componentes vulneráveis.",
+		Check:          "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function:       model.Operations,
 		STRIDE:         model.Tampering,
-		DetectionLogic: "In-scope technical assets running as containers.",
-		RiskAssessment: "The risk rating depends on the sensitivity of the technical asset itself and of the data assets.",
-		FalsePositives: "Fully trusted (i.e. reviewed and cryptographically signed or similar) base images of containers can be considered " +
-			"as false positives after individual review.",
+		DetectionLogic: "Ativos técnicos no escopo executados como contêineres.",
+		RiskAssessment: "A classificação de risco depende da sensibilidade do próprio ativo técnico e dos ativos de dados.",
+		FalsePositives: "Imagens de base de contêineres totalmente confiáveis (ou seja, revisadas e assinadas criptograficamente ou semelhantes) podem ser consideradas " +
+			"como falsos positivos após revisão individual.",
 		ModelFailurePossibleReason: false,
 		CWE:                        912,
 	}

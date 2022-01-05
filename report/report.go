@@ -3,54 +3,6 @@ package report
 import (
 	"errors"
 	"fmt"
-	"github.com/jung-kurt/gofpdf"
-	"github.com/jung-kurt/gofpdf/contrib/gofpdi"
-	"github.com/threagile/threagile/colors"
-	"github.com/threagile/threagile/model"
-	"github.com/threagile/threagile/risks/built-in/accidental-secret-leak"
-	"github.com/threagile/threagile/risks/built-in/code-backdooring"
-	"github.com/threagile/threagile/risks/built-in/container-baseimage-backdooring"
-	"github.com/threagile/threagile/risks/built-in/container-platform-escape"
-	"github.com/threagile/threagile/risks/built-in/cross-site-request-forgery"
-	"github.com/threagile/threagile/risks/built-in/cross-site-scripting"
-	"github.com/threagile/threagile/risks/built-in/dos-risky-access-across-trust-boundary"
-	"github.com/threagile/threagile/risks/built-in/incomplete-model"
-	"github.com/threagile/threagile/risks/built-in/ldap-injection"
-	"github.com/threagile/threagile/risks/built-in/missing-authentication"
-	"github.com/threagile/threagile/risks/built-in/missing-authentication-second-factor"
-	"github.com/threagile/threagile/risks/built-in/missing-build-infrastructure"
-	"github.com/threagile/threagile/risks/built-in/missing-cloud-hardening"
-	"github.com/threagile/threagile/risks/built-in/missing-file-validation"
-	"github.com/threagile/threagile/risks/built-in/missing-hardening"
-	"github.com/threagile/threagile/risks/built-in/missing-identity-propagation"
-	"github.com/threagile/threagile/risks/built-in/missing-identity-provider-isolation"
-	"github.com/threagile/threagile/risks/built-in/missing-identity-store"
-	"github.com/threagile/threagile/risks/built-in/missing-network-segmentation"
-	"github.com/threagile/threagile/risks/built-in/missing-vault"
-	"github.com/threagile/threagile/risks/built-in/missing-vault-isolation"
-	"github.com/threagile/threagile/risks/built-in/missing-waf"
-	"github.com/threagile/threagile/risks/built-in/mixed-targets-on-shared-runtime"
-	"github.com/threagile/threagile/risks/built-in/path-traversal"
-	"github.com/threagile/threagile/risks/built-in/push-instead-of-pull-deployment"
-	"github.com/threagile/threagile/risks/built-in/search-query-injection"
-	"github.com/threagile/threagile/risks/built-in/server-side-request-forgery"
-	"github.com/threagile/threagile/risks/built-in/service-registry-poisoning"
-	"github.com/threagile/threagile/risks/built-in/sql-nosql-injection"
-	"github.com/threagile/threagile/risks/built-in/unchecked-deployment"
-	"github.com/threagile/threagile/risks/built-in/unencrypted-asset"
-	"github.com/threagile/threagile/risks/built-in/unencrypted-communication"
-	"github.com/threagile/threagile/risks/built-in/unguarded-access-from-internet"
-	"github.com/threagile/threagile/risks/built-in/unguarded-direct-datastore-access"
-	"github.com/threagile/threagile/risks/built-in/unnecessary-communication-link"
-	"github.com/threagile/threagile/risks/built-in/unnecessary-data-asset"
-	"github.com/threagile/threagile/risks/built-in/unnecessary-data-transfer"
-	"github.com/threagile/threagile/risks/built-in/unnecessary-technical-asset"
-	"github.com/threagile/threagile/risks/built-in/untrusted-deserialization"
-	"github.com/threagile/threagile/risks/built-in/wrong-communication-link-content"
-	"github.com/threagile/threagile/risks/built-in/wrong-trust-boundary-content"
-	"github.com/threagile/threagile/risks/built-in/xml-external-entity"
-	"github.com/wcharczuk/go-chart"
-	"github.com/wcharczuk/go-chart/drawing"
 	"image"
 	"io/ioutil"
 	"log"
@@ -62,6 +14,55 @@ import (
 	"strings"
 	"time"
 	"unicode/utf8"
+
+	"github.com/jung-kurt/gofpdf"
+	"github.com/jung-kurt/gofpdf/contrib/gofpdi"
+	"github.com/threagile/threagile/colors"
+	"github.com/threagile/threagile/model"
+	accidental_secret_leak "github.com/threagile/threagile/risks/built-in/accidental-secret-leak"
+	code_backdooring "github.com/threagile/threagile/risks/built-in/code-backdooring"
+	container_baseimage_backdooring "github.com/threagile/threagile/risks/built-in/container-baseimage-backdooring"
+	container_platform_escape "github.com/threagile/threagile/risks/built-in/container-platform-escape"
+	cross_site_request_forgery "github.com/threagile/threagile/risks/built-in/cross-site-request-forgery"
+	cross_site_scripting "github.com/threagile/threagile/risks/built-in/cross-site-scripting"
+	dos_risky_access_across_trust_boundary "github.com/threagile/threagile/risks/built-in/dos-risky-access-across-trust-boundary"
+	incomplete_model "github.com/threagile/threagile/risks/built-in/incomplete-model"
+	ldap_injection "github.com/threagile/threagile/risks/built-in/ldap-injection"
+	missing_authentication "github.com/threagile/threagile/risks/built-in/missing-authentication"
+	missing_authentication_second_factor "github.com/threagile/threagile/risks/built-in/missing-authentication-second-factor"
+	missing_build_infrastructure "github.com/threagile/threagile/risks/built-in/missing-build-infrastructure"
+	missing_cloud_hardening "github.com/threagile/threagile/risks/built-in/missing-cloud-hardening"
+	missing_file_validation "github.com/threagile/threagile/risks/built-in/missing-file-validation"
+	missing_hardening "github.com/threagile/threagile/risks/built-in/missing-hardening"
+	missing_identity_propagation "github.com/threagile/threagile/risks/built-in/missing-identity-propagation"
+	missing_identity_provider_isolation "github.com/threagile/threagile/risks/built-in/missing-identity-provider-isolation"
+	missing_identity_store "github.com/threagile/threagile/risks/built-in/missing-identity-store"
+	missing_network_segmentation "github.com/threagile/threagile/risks/built-in/missing-network-segmentation"
+	missing_vault "github.com/threagile/threagile/risks/built-in/missing-vault"
+	missing_vault_isolation "github.com/threagile/threagile/risks/built-in/missing-vault-isolation"
+	missing_waf "github.com/threagile/threagile/risks/built-in/missing-waf"
+	mixed_targets_on_shared_runtime "github.com/threagile/threagile/risks/built-in/mixed-targets-on-shared-runtime"
+	path_traversal "github.com/threagile/threagile/risks/built-in/path-traversal"
+	push_instead_of_pull_deployment "github.com/threagile/threagile/risks/built-in/push-instead-of-pull-deployment"
+	search_query_injection "github.com/threagile/threagile/risks/built-in/search-query-injection"
+	server_side_request_forgery "github.com/threagile/threagile/risks/built-in/server-side-request-forgery"
+	service_registry_poisoning "github.com/threagile/threagile/risks/built-in/service-registry-poisoning"
+	sql_nosql_injection "github.com/threagile/threagile/risks/built-in/sql-nosql-injection"
+	unchecked_deployment "github.com/threagile/threagile/risks/built-in/unchecked-deployment"
+	unencrypted_asset "github.com/threagile/threagile/risks/built-in/unencrypted-asset"
+	unencrypted_communication "github.com/threagile/threagile/risks/built-in/unencrypted-communication"
+	unguarded_access_from_internet "github.com/threagile/threagile/risks/built-in/unguarded-access-from-internet"
+	unguarded_direct_datastore_access "github.com/threagile/threagile/risks/built-in/unguarded-direct-datastore-access"
+	unnecessary_communication_link "github.com/threagile/threagile/risks/built-in/unnecessary-communication-link"
+	unnecessary_data_asset "github.com/threagile/threagile/risks/built-in/unnecessary-data-asset"
+	unnecessary_data_transfer "github.com/threagile/threagile/risks/built-in/unnecessary-data-transfer"
+	unnecessary_technical_asset "github.com/threagile/threagile/risks/built-in/unnecessary-technical-asset"
+	untrusted_deserialization "github.com/threagile/threagile/risks/built-in/untrusted-deserialization"
+	wrong_communication_link_content "github.com/threagile/threagile/risks/built-in/wrong-communication-link-content"
+	wrong_trust_boundary_content "github.com/threagile/threagile/risks/built-in/wrong-trust-boundary-content"
+	xml_external_entity "github.com/threagile/threagile/risks/built-in/xml-external-entity"
+	"github.com/wcharczuk/go-chart"
+	"github.com/wcharczuk/go-chart/drawing"
 )
 
 const fontSizeHeadline, fontSizeHeadlineSmall, fontSizeBody, fontSizeSmall, fontSizeVerySmall = 20, 16, 12, 9, 7
@@ -224,12 +225,12 @@ func createCover() {
 func createTableOfContents() {
 	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	pdf.AddPage()
-	currentChapterTitleBreadcrumb = "Table of Contents"
+	currentChapterTitleBreadcrumb = uni("Índice")
 	homeLink = pdf.AddLink()
 	defineLinkTarget("{home}")
 	gofpdi.UseImportedTemplate(pdf, contentTemplateId, 0, 0, 0, 300)
 	pdf.SetFont("Helvetica", "B", fontSizeHeadline)
-	pdf.Text(11, 40, "Table of Contents")
+	pdf.Text(11, 40, uni("Índice"))
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdf.SetY(46)
 
@@ -241,7 +242,7 @@ func createTableOfContents() {
 
 	var y float64 = 50
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
-	pdf.Text(11, y, "Results Overview")
+	pdf.Text(11, y, uni("Visão geral dos resultados"))
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 
 	y += 6
@@ -366,16 +367,16 @@ func createTableOfContents() {
 
 	y += 6
 	modelFailures := model.FlattenRiskSlice(model.FilterByModelFailures(model.GeneratedRisksByCategory))
-	risks = "Risks"
+	risks = "Riscos"
 	count = len(modelFailures)
 	if count == 1 {
-		risks = "Risk"
+		risks = "Risco"
 	}
 	countStillAtRisk := len(model.ReduceToOnlyStillAtRisk(modelFailures))
 	if countStillAtRisk > 0 {
 		colors.ColorModelFailure(pdf)
 	}
-	pdf.Text(11, y, "    "+"Potential Model Failures: "+strconv.Itoa(countStillAtRisk)+" / "+strconv.Itoa(count)+" "+risks)
+	pdf.Text(11, y, "    "+"Potenciais Falhas do Modelo: "+strconv.Itoa(countStillAtRisk)+" / "+strconv.Itoa(count)+" "+risks)
 	pdf.Text(175, y, "{model-failures}")
 	pdfColorBlack()
 	pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
@@ -407,10 +408,10 @@ func createTableOfContents() {
 		}
 		pdf.SetFont("Helvetica", "B", fontSizeBody)
 		pdf.SetTextColor(0, 0, 0)
-		pdf.Text(11, y, "Risks by Vulnerability Category")
+		pdf.Text(11, y, "Riscos por categoria de vulnerabilidade")
 		pdf.SetFont("Helvetica", "", fontSizeBody)
 		y += 6
-		pdf.Text(11, y, "    "+"Identified Risks by Vulnerability Category")
+		pdf.Text(11, y, "    "+"Riscos identificados por categoria de vulnerabilidade")
 		pdf.Text(175, y, "{intro-risks-by-vulnerability-category}")
 		pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
 		pdf.Link(10, y-5, 172.5, 6.5, pdf.AddLink())
@@ -462,10 +463,10 @@ func createTableOfContents() {
 		}
 		pdf.SetFont("Helvetica", "B", fontSizeBody)
 		pdf.SetTextColor(0, 0, 0)
-		pdf.Text(11, y, "Risks by Technical Asset")
+		pdf.Text(11, y, "Riscos por Ativo")
 		pdf.SetFont("Helvetica", "", fontSizeBody)
 		y += 6
-		pdf.Text(11, y, "    "+"Identified Risks by Technical Asset")
+		pdf.Text(11, y, "    "+"Riscos Identificados por Ativo ")
 		pdf.Text(175, y, "{intro-risks-by-technical-asset}")
 		pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
 		pdf.Link(10, y-5, 172.5, 6.5, pdf.AddLink())
@@ -522,10 +523,10 @@ func createTableOfContents() {
 		}
 		pdf.SetFont("Helvetica", "B", fontSizeBody)
 		pdfColorBlack()
-		pdf.Text(11, y, "Data Breach Probabilities by Data Asset")
+		pdf.Text(11, y, uni("Probabilidades de violação de dados por ativo de dados"))
 		pdf.SetFont("Helvetica", "", fontSizeBody)
 		y += 6
-		pdf.Text(11, y, "    "+"Identified Data Breach Probabilities by Data Asset")
+		pdf.Text(11, y, "    "+uni("Probabilidades de violação de dados identificadas por ativo de dados"))
 		pdf.Text(175, y, "{intro-risks-by-data-asset}")
 		pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
 		pdf.Link(10, y-5, 172.5, 6.5, pdf.AddLink())
@@ -633,14 +634,14 @@ func createTableOfContents() {
 	}
 	pdfColorBlack()
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
-	pdf.Text(11, y, "About Threagile")
+	pdf.Text(11, y, "Sobre Threagile")
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	y += 6
 	if y > 275 {
 		pageBreakInLists()
 		y = 40
 	}
-	pdf.Text(11, y, "    "+"Risk Rules Checked by Threagile")
+	pdf.Text(11, y, "    "+"Regras de risco verificadas por Threagile")
 	pdf.Text(175, y, "{risk-rules-checked}")
 	pdf.Line(15.6, y+1.3, 11+171.5, y+1.3)
 	pdf.Link(10, y-5, 172.5, 6.5, pdf.AddLink())
@@ -677,6 +678,7 @@ func defineLinkTarget(alias string) {
 }
 
 func createDisclaimer() {
+	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	pdf.AddPage()
 	currentChapterTitleBreadcrumb = "Disclaimer"
 	defineLinkTarget("{disclaimer}")
@@ -687,43 +689,44 @@ func createDisclaimer() {
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdf.SetY(46)
 
-	var disclaimer strings.Builder
-	disclaimer.WriteString(model.ParsedModelRoot.Author.Name + " conducted this threat analysis using the open-source Threagile toolkit " +
-		"on the applications and systems that were modeled as of this report's date. " +
-		"Information security threats are continually changing, with new " +
-		"vulnerabilities discovered on a daily basis, and no application can ever be 100% secure no matter how much " +
-		"threat modeling is conducted. It is recommended to execute threat modeling and also penetration testing on a regular basis " +
-		"(for example yearly) to ensure a high ongoing level of security and constantly check for new attack vectors. " +
+	var disclamertext = uni(model.ParsedModelRoot.Author.Name + " conduziu esta análise de ameaças usando o kit de ferramentas de código aberto Threagile " +
+		"nos aplicativos e sistemas que foram modelados na data deste relatório. " +
+		"Ameaças à segurança da informação estão mudando continuamente, com novas " +
+		"vulnerabilidades descobertas diariamente, e nenhum aplicativo pode ser 100% seguro, não importa o quanto " +
+		"a modelagem de ameaças é conduzida. Recomenda-se executar modelagem de ameaça e também teste de penetração em uma base regular " +
+		"(por exemplo, anualmente) para garantir um alto nível contínuo de segurança e verificar constantemente se há novos vetores de ataque." +
 		"<br><br>" +
-		"This report cannot and does not protect against personal or business loss as the result of use of the " +
-		"applications or systems described. " + model.ParsedModelRoot.Author.Name + " and the Threagile toolkit offers no warranties, representations or " +
-		"legal certifications concerning the applications or systems it tests. All software includes defects: nothing " +
-		"in this document is intended to represent or warrant that threat modeling was complete and without error, " +
-		"nor does this document represent or warrant that the architecture analyzed is suitable to task, free of other " +
-		"defects than reported, fully compliant with any industry standards, or fully compatible with any operating " +
-		"system, hardware, or other application. Threat modeling tries to analyze the modeled architecture without " +
-		"having access to a real working system and thus cannot and does not test the implementation for defects and vulnerabilities. " +
-		"These kinds of checks would only be possible with a separate code review and penetration test against " +
-		"a working system and not via a threat model." +
+		"Este relatório não pode e não protege contra perdas pessoais ou comerciais como resultado do uso do" +
+		"aplicativos ou sistemas descritos. " + model.ParsedModelRoot.Author.Name + " e o kit de ferramentas Threagile não oferece garantias, representações ou " +
+		"certificações legais relativas aos aplicativos ou sistemas que testa. Todo o software inclui defeitos: nada " +
+		"neste documento tem a intenção de representar ou garantir que a modelagem de ameaças foi completa e sem erros, " +
+		"nem este documento representa ou garante que a arquitetura analisada é adequada para a tarefa, livre de outros " +
+		"defeitos do que o relatado, totalmente compatível com quaisquer padrões da indústria ou totalmente compatível com qualquer " +
+		"sistema, hardware ou outro aplicativo.Modelagem de ameaças tenta analisar a arquitetura modelada sem" +
+		"Ter acesso a um sistema de trabalho real e, portanto, não pode testar a implementação para defeitos e vulnerabilidades." +
+		"Esses tipos de cheques só seriam possíveis com uma revisão de código separado e teste de penetração contraontra " +
+		"um sistema de trabalho e não através de um modelo de ameaça.odelo de ameaça." +
 		"<br><br>" +
-		"By using the resulting information you agree that " + model.ParsedModelRoot.Author.Name + " and the Threagile toolkit " +
-		"shall be held harmless in any event." +
+		"Usando as informações resultantes que você concorda queda queda queda que que " + model.ParsedModelRoot.Author.Name + " e o kit de ferramentas Threagile " +
+		"devem ser considerados inofensivos em qualquer caso." +
 		"<br><br>" +
-		"This report is confidential and intended for internal, confidential use by the client. The recipient " +
-		"is obligated to ensure the highly confidential contents are kept secret. The recipient assumes responsibility " +
-		"for further distribution of this document." +
+		"Este relatório é confidencial e destina-se ao uso interno e confidencial do cliente. O destinatário " +
+		"tem a obrigação de garantir que os conteúdos altamente confidenciais sejam mantidos em sigilo. O destinatário assume a responsabilidade " +
+		"para distribuição posterior deste documento." +
 		"<br><br>" +
-		"In this particular project, a timebox approach was used to define the analysis effort. This means that the " +
-		"author allotted a prearranged amount of time to identify and document threats. Because of this, there " +
-		"is no guarantee that all possible threats and risks are discovered. Furthermore, the analysis " +
-		"applies to a snapshot of the current state of the modeled architecture (based on the architecture information provided " +
-		"by the customer) at the examination time." +
+		"Neste projeto específico, uma abordagem de faixa de fuso horário foi usada para definir o esforço de análise.Isso significa que o " +
+		"O autor distribuiu uma quantidade de tempo pré-arranjada para identificar e documentar ameaças.Por causa disso, lá " +
+		"Não é garantia de que todas as possíveis ameaças e riscos sejam descobertos.Além disso, a análiseise" +
+		"aplica-se a um instantâneo do estado atual da arquitetura modelada (com base nas informações da arquitetura fornecida " +
+		"pelo cliente) no tempo de exame." +
 		"<br><br><br>" +
-		"<b>Report Distribution</b>" +
+		"<b>Distribuição de relatórios</b>" +
 		"<br><br>" +
-		"Distribution of this report (in full or in part like diagrams or risk findings) requires that this disclaimer " +
-		"as well as the chapter about the Threagile toolkit and method used is kept intact as part of the " +
-		"distributed report or referenced from the distributed parts.")
+		"Distribuição deste relatório (na íntegra ou em parte, como diagramas ou descobertas de risco) exige que este responsávelisenção de responsabilidade " +
+		"bem como o capítulo sobre o kit de ferramentas Threagile e o método usado é mantido intacto como parte do" +
+		"relatório distribuído ou referenciado das partes distribuídas.")
+	var disclaimer strings.Builder
+	disclaimer.WriteString(disclamertext)
 	html := pdf.HTMLBasicNew()
 	html.Write(5, disclaimer.String())
 	pdfColorBlack()
@@ -732,7 +735,7 @@ func createDisclaimer() {
 func createManagementSummary() {
 	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	pdf.SetTextColor(0, 0, 0)
-	title := "Management Summary"
+	title := uni("Resumo da gestão")
 	addHeadline(title, false)
 	defineLinkTarget("{management-summary}")
 	currentChapterTitleBreadcrumb = title
@@ -750,21 +753,21 @@ func createManagementSummary() {
 	countStatusFalsePositive := len(model.FilteredByRiskTrackingFalsePositive())
 
 	html := pdf.HTMLBasicNew()
-	html.Write(5, "Threagile toolkit was used to model the architecture of \""+uni(model.ParsedModelRoot.Title)+"\" "+
-		"and derive risks by analyzing the components and data flows. The risks identified during this analysis are shown "+
-		"in the following chapters. Identified risks during threat modeling do not necessarily mean that the "+
-		"vulnerability associated with this risk actually exists: it is more to be seen as a list of potential risks and "+
-		"threats, which should be individually reviewed and reduced by removing false positives. For the remaining risks it should "+
-		"be checked in the design and implementation of \""+uni(model.ParsedModelRoot.Title)+"\" whether the mitigation advices "+
-		"have been applied or not."+
+	html.Write(5, uni("Toolkit de Thragile foi usado para modelar a arquitetura de arquitetura do \""+uni(model.ParsedModelRoot.Title)+"\" "+
+		"e derivar riscos analisando os componentes e fluxos de dados. Os riscos identificados durante esta análise são mostrados "+
+		"nos capítulos seguintes. Os riscos identificados durante a modelagem de ameaças não significam necessariamente que  "+
+		"vulnerabilidade associada a este risco realmente existe: deve ser vista como uma lista de riscos potenciais e "+
+		"ameaças, que devem ser individualmente revisadas e reduzidas removendo falsos positivos. Para os riscos restantes, deve "+
+		"ser verificada na concepção e implementação de \""+uni(model.ParsedModelRoot.Title)+"\" se os conselhos de mitigação "+
+		"foram aplicados ou não."+
 		"<br><br>"+
-		"Each risk finding references a chapter of the OWASP ASVS (Application Security Verification Standard) audit checklist. "+
-		"The OWASP ASVS checklist should be considered as an inspiration by architects and developers to further harden "+
-		"the application in a Defense-in-Depth approach. Additionally, for each risk finding a "+
-		"link towards a matching OWASP Cheat Sheet or similar with technical details about how to implement a mitigation is given."+
+		"Cada descoberta de risco faz referência a um capítulo da lista de verificação de auditoria OWASP ASVS (Application Security Verification Standard). "+
+		"A lista de verificação OWASP ASVS deve ser considerada como uma inspiração por arquitetos e desenvolvedores para fortalecer ainda mais "+
+		"a aplicação em uma abordagem de defesa em profundidade. Além disso, para cada risco, encontrar um "+
+		"é fornecido um link para uma Folha de Dicas OWASP ou similar com detalhes técnicos sobre como implementar uma mitigação."+
 		"<br><br>"+
-		"In total <b>"+strconv.Itoa(model.TotalRiskCount())+" initial risks</b> in <b>"+strconv.Itoa(len(model.GeneratedRisksByCategory))+" categories</b> have "+
-		"been identified during the threat modeling process:<br><br>") // TODO plural singular stuff risk/s category/ies has/have
+		"No total <b>"+strconv.Itoa(model.TotalRiskCount())+" riscos iniciais</b> em <b>"+strconv.Itoa(len(model.GeneratedRisksByCategory))+" categorias</b> tenha "+
+		"foram identificados durante o processo de modelagem de ameaças<br><br>")) // TODO plural singular stuff risk/s category/ies has/have
 
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
 
@@ -917,16 +920,17 @@ func createManagementSummary() {
 }
 
 func createRiskMitigationStatus() {
+	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	pdf.SetTextColor(0, 0, 0)
 	stillAtRisk := model.FilteredByStillAtRisk()
 	count := len(stillAtRisk)
-	title := "Risk Mitigation"
+	title := uni("Mitigação de Risco")
 	addHeadline(title, false)
 	defineLinkTarget("{risk-mitigation-status}")
 	currentChapterTitleBreadcrumb = title
 
 	html := pdf.HTMLBasicNew()
-	html.Write(5, "The following chart gives a high-level overview of the risk tracking status (including mitigated risks):")
+	html.Write(5, uni("O gráfico a seguir oferece uma visão de alto nível do risco (incluindo riscos atenuados)"))
 
 	risksCritical := model.FilteredByOnlyCriticalRisks()
 	risksHigh := model.FilteredByOnlyHighRisks()
@@ -1094,13 +1098,13 @@ func createRiskMitigationStatus() {
 
 	pdfColorBlack()
 	if count == 0 {
-		html.Write(5, "<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>"+
-			"After removal of risks with status <i>mitigated</i> and <i>false positive</i> "+
-			"<b>"+strconv.Itoa(count)+" remain unmitigated</b>.")
+		html.Write(5, uni("<br><br><br><br><br><br><br><br><br><br><br><br><br><br>"+
+			"Após a remoção de riscos com status <i>mitigado</i> e <i>falso positivo</i> "+
+			"<b>"+strconv.Itoa(count)+" permanecem não mitigados</b>."))
 	} else {
-		html.Write(5, "<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>"+
-			"After removal of risks with status <i>mitigated</i> and <i>false positive</i> "+
-			"the following <b>"+strconv.Itoa(count)+" remain unmitigated</b>:")
+		html.Write(5, uni("<br><br><br><br><br><br><br><br><br><br><br><br><br><br>"+
+			"Após a remoção de riscos com status <i>mitigado</i> e <i>falso positivo</i> "+
+			"o seguinte <b>"+strconv.Itoa(count)+" permanecer não mitigado</b>:"))
 
 		countCritical := len(model.ReduceToOnlyStillAtRisk(model.FilteredByOnlyCriticalRisks()))
 		countHigh := len(model.ReduceToOnlyStillAtRisk(model.FilteredByOnlyHighRisks()))
@@ -1266,6 +1270,7 @@ func createImpactRemainingRisks() {
 }
 
 func renderImpactAnalysis(initialRisks bool) {
+	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	pdf.SetTextColor(0, 0, 0)
 	count, catCount := model.TotalRiskCount(), len(model.GeneratedRisksByCategory)
 	if !initialRisks {
@@ -1279,12 +1284,12 @@ func renderImpactAnalysis(initialRisks bool) {
 		catStr = "Category"
 	}
 	if initialRisks {
-		chapTitle := "Impact Analysis of " + strconv.Itoa(count) + " Initial " + riskStr + " in " + strconv.Itoa(catCount) + " " + catStr
+		chapTitle := uni("Análise de impacto dos " + strconv.Itoa(count) + " riscos " + riskStr + " em " + strconv.Itoa(catCount) + " " + catStr)
 		addHeadline(chapTitle, false)
 		defineLinkTarget("{impact-analysis-initial-risks}")
 		currentChapterTitleBreadcrumb = chapTitle
 	} else {
-		chapTitle := "Impact Analysis of " + strconv.Itoa(count) + " Remaining " + riskStr + " in " + strconv.Itoa(catCount) + " " + catStr
+		chapTitle := uni("Análise de impacto de " + strconv.Itoa(count) + " restante " + riskStr + " em " + strconv.Itoa(catCount) + " " + catStr)
 		addHeadline(chapTitle, false)
 		defineLinkTarget("{impact-analysis-remaining-risks}")
 		currentChapterTitleBreadcrumb = chapTitle
@@ -1292,22 +1297,22 @@ func renderImpactAnalysis(initialRisks bool) {
 
 	html := pdf.HTMLBasicNew()
 	var strBuilder strings.Builder
-	riskStr = "risks"
+	riskStr = "riscos"
 	if count == 1 {
-		riskStr = "risk"
+		riskStr = "riscos"
 	}
-	initialStr := "initial"
+	initialStr := "iniciais"
 	if !initialRisks {
-		initialStr = "remaining"
+		initialStr = "iniciais"
 	}
-	strBuilder.WriteString("The most prevalent impacts of the <b>" + strconv.Itoa(count) + " " +
-		initialStr + " " + riskStr + "</b> (distributed over <b>" + strconv.Itoa(catCount) + " risk categories</b>) are " +
-		"(taking the severity ratings into account and using the highest for each category):<br>")
+	strBuilder.WriteString(uni("Os impactos mais prevalentes dos <b>" + strconv.Itoa(count) + " " +
+		riskStr + " " + initialStr + "</b> (distribuído sobre <b>" + strconv.Itoa(catCount) + " categorias de risco</b>) são " +
+		"(levando em consideração as classificações de gravidade e usando a mais alta para cada categoria):<br>"))
 	html.Write(5, strBuilder.String())
 	strBuilder.Reset()
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
 	pdfColorGray()
-	html.Write(5, "Risk finding paragraphs are clickable and link to the corresponding chapter.")
+	html.Write(5, uni("Os parágrafos de localização de risco são clicáveis e vinculados ao capítulo correspondente"))
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 
 	addCategories(model.CategoriesOfOnlyCriticalRisks(model.GeneratedRisksByCategory, initialRisks),
@@ -1328,26 +1333,26 @@ func renderImpactAnalysis(initialRisks bool) {
 func createOutOfScopeAssets() {
 	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	pdf.SetTextColor(0, 0, 0)
-	assets := "Assets"
+	assets := "Ativos"
 	count := len(model.OutOfScopeTechnicalAssets())
 	if count == 1 {
-		assets = "Asset"
+		assets = "Ativo"
 	}
-	chapTitle := "Out-of-Scope Assets: " + strconv.Itoa(count) + " " + assets
+	chapTitle := "Ativos fora do escopo: " + strconv.Itoa(count) + " " + assets
 	addHeadline(chapTitle, false)
 	defineLinkTarget("{out-of-scope-assets}")
 	currentChapterTitleBreadcrumb = chapTitle
 
 	html := pdf.HTMLBasicNew()
 	var strBuilder strings.Builder
-	strBuilder.WriteString("This chapter lists all technical assets that have been defined as out-of-scope. " +
-		"Each one should be checked in the model whether it should better be included in the " +
-		"overall risk analysis:<br>")
+	strBuilder.WriteString(uni("Este capítulo lista todos os ativos técnicos que foram definidos como fora do escopo. " +
+		"Cada um deve ser verificado no modelo se deve ser melhor incluído no " +
+		"análise de risco geral:<br>"))
 	html.Write(5, strBuilder.String())
 	strBuilder.Reset()
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
 	pdfColorGray()
-	html.Write(5, "Technical asset paragraphs are clickable and link to the corresponding chapter.")
+	html.Write(5, uni("Parágrafos de recursos técnicos são clicáveis e vinculados ao capítulo correspondente."))
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 
 	outOfScopeAssetCount := 0
@@ -1381,7 +1386,7 @@ func createOutOfScopeAssets() {
 
 	if outOfScopeAssetCount == 0 {
 		pdfColorGray()
-		html.Write(5, "<br><br>No technical assets have been defined as out-of-scope.")
+		html.Write(5, uni("<br><br>Nenhum ativo técnico foi definido como fora do escopo."))
 	}
 
 	pdf.SetDrawColor(0, 0, 0)
@@ -1389,6 +1394,7 @@ func createOutOfScopeAssets() {
 }
 
 func createModelFailures() {
+	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	pdf.SetTextColor(0, 0, 0)
 	modelFailures := model.FlattenRiskSlice(model.FilterByModelFailures(model.GeneratedRisksByCategory))
 	risks := "Risks"
@@ -1408,20 +1414,20 @@ func createModelFailures() {
 
 	html := pdf.HTMLBasicNew()
 	var strBuilder strings.Builder
-	strBuilder.WriteString("This chapter lists potential model failures where not all relevant assets have been " +
-		"modeled or the model might itself contain inconsistencies. Each potential model failure should be checked " +
-		"in the model against the architecture design:<br>")
+	strBuilder.WriteString(uni("Este capítulo lista as falhas potenciais do modelo onde nem todos os ativos relevantes foram " +
+		"modelado ou o próprio modelo pode conter inconsistências. Cada falha potencial do modelo deve ser verificada " +
+		"no modelo contra o design de arquitetura:<br>"))
 	html.Write(5, strBuilder.String())
 	strBuilder.Reset()
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
 	pdfColorGray()
-	html.Write(5, "Risk finding paragraphs are clickable and link to the corresponding chapter.")
+	html.Write(5, uni("Os parágrafos de localização de risco são clicáveis e vinculados ao capítulo correspondente."))
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 
 	modelFailuresByCategory := model.FilterByModelFailures(model.GeneratedRisksByCategory)
 	if len(modelFailuresByCategory) == 0 {
 		pdfColorGray()
-		html.Write(5, "<br><br>No potential model failures have been identified.")
+		html.Write(5, uni("<br><br>Nenhuma falha potencial do modelo foi identificada."))
 	} else {
 		addCategories(model.CategoriesOfOnlyCriticalRisks(modelFailuresByCategory, true),
 			model.CriticalSeverity, true, true, false, true)
@@ -1449,13 +1455,13 @@ func createRAA(introTextRAA string) {
 
 	html := pdf.HTMLBasicNew()
 	var strBuilder strings.Builder
-	strBuilder.WriteString(introTextRAA)
+	strBuilder.WriteString(uni(introTextRAA))
 	strBuilder.WriteString("<br>")
 	html.Write(5, strBuilder.String())
 	strBuilder.Reset()
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
 	pdfColorGray()
-	html.Write(5, "Technical asset paragraphs are clickable and link to the corresponding chapter.")
+	html.Write(5, uni("Parágrafos de recursos técnicos são clicáveis e vinculados ao capítulo correspondente."))
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 
 	for _, technicalAsset := range model.SortedTechnicalAssetsByRAAAndTitle() {
@@ -1586,6 +1592,7 @@ func createDataRiskQuickWins() {
 */
 
 func addCategories(riskCategories []model.RiskCategory, severity model.RiskSeverity, bothInitialAndRemainingRisks bool, initialRisks bool, describeImpact bool, describeDescription bool) {
+	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	html := pdf.HTMLBasicNew()
 	var strBuilder strings.Builder
 	sort.Sort(model.ByRiskCategoryTitleSort(riskCategories))
@@ -1639,7 +1646,7 @@ func addCategories(riskCategories []model.RiskCategory, severity model.RiskSever
 		if len(model.ReduceToOnlyStillAtRisk(risks)) == 0 {
 			pdfColorBlack()
 		}
-		html.Write(5, strBuilder.String())
+		html.Write(5, uni(strBuilder.String()))
 		strBuilder.Reset()
 		posY := pdf.GetY()
 		strBuilder.WriteString(prefix)
@@ -1647,26 +1654,26 @@ func addCategories(riskCategories []model.RiskCategory, severity model.RiskSever
 		strBuilder.WriteString(riskCategory.Title)
 		strBuilder.WriteString("</b>: ")
 		count := len(risks)
-		initialStr := "Initial"
+		initialStr := "Inicial"
 		if !initialRisks {
-			initialStr = "Remaining"
+			initialStr = "Restante"
 		}
 		remainingRisks := model.ReduceToOnlyStillAtRisk(risks)
-		suffix := strconv.Itoa(count) + " " + initialStr + " Risk"
+		suffix := strconv.Itoa(count) + " " + initialStr + " Risco"
 		if bothInitialAndRemainingRisks {
-			suffix = strconv.Itoa(len(remainingRisks)) + " / " + strconv.Itoa(count) + " Risk"
+			suffix = strconv.Itoa(len(remainingRisks)) + " / " + strconv.Itoa(count) + " Risco"
 		}
 		if count != 1 {
 			suffix += "s"
 		}
-		suffix += " - Exploitation likelihood is <i>"
+		suffix += " - A probabilidade de exploração é <i>"
 		if initialRisks {
-			suffix += model.HighestExploitationLikelihood(risks).Title() + "</i> with <i>" + model.HighestExploitationImpact(risks).Title() + "</i> impact."
+			suffix += "<b>" + model.HighestExploitationLikelihood(risks).Title() + "</b></i> com <i><b>" + model.HighestExploitationImpact(risks).Title() + "</b></i> impacto."
 		} else {
-			suffix += model.HighestExploitationLikelihood(remainingRisks).Title() + "</i> with <i>" + model.HighestExploitationImpact(remainingRisks).Title() + "</i> impact."
+			suffix += "<b>" + model.HighestExploitationLikelihood(remainingRisks).Title() + "</b></i> com <i><b>" + model.HighestExploitationImpact(remainingRisks).Title() + "</b></i> impacto."
 		}
 		strBuilder.WriteString(suffix + "<br>")
-		html.Write(5, strBuilder.String())
+		html.Write(5, uni(strBuilder.String()))
 		strBuilder.Reset()
 		pdf.SetTextColor(0, 0, 0)
 		if describeImpact {
@@ -1676,7 +1683,7 @@ func addCategories(riskCategories []model.RiskCategory, severity model.RiskSever
 		} else {
 			strBuilder.WriteString(firstParagraph(riskCategory.Mitigation))
 		}
-		html.Write(5, strBuilder.String())
+		html.Write(5, uni(strBuilder.String()))
 		strBuilder.Reset()
 		pdf.Link(9, posY, 190, pdf.GetY()-posY+4, tocLinkIdByAssetId[riskCategory.Id])
 	}
@@ -1691,8 +1698,9 @@ func firstParagraph(text string) string {
 }
 
 func createAssignmentByFunction() {
+	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	pdf.SetTextColor(0, 0, 0)
-	title := "Assignment by Function"
+	title := "Atribuição por função"
 	addHeadline(title, false)
 	defineLinkTarget("{function-assignment}")
 	currentChapterTitleBreadcrumb = title
@@ -1707,19 +1715,19 @@ func createAssignmentByFunction() {
 	countDevelopmentFunction := model.CountRisks(risksDevelopmentFunction)
 	countOperationFunction := model.CountRisks(risksOperationFunction)
 	var intro strings.Builder
-	intro.WriteString("This chapter clusters and assigns the risks by functions which are most likely able to " +
-		"check and mitigate them: " +
-		"In total <b>" + strconv.Itoa(model.TotalRiskCount()) + " potential risks</b> have been identified during the threat modeling process " +
-		"of which <b>" + strconv.Itoa(countBusinessSideFunction) + " should be checked by " + model.BusinessSide.Title() + "</b>, " +
-		"<b>" + strconv.Itoa(countArchitectureFunction) + " should be checked by " + model.Architecture.Title() + "</b>, " +
-		"<b>" + strconv.Itoa(countDevelopmentFunction) + " should be checked by " + model.Development.Title() + "</b>, " +
-		"and <b>" + strconv.Itoa(countOperationFunction) + " should be checked by " + model.Operations.Title() + "</b>.<br>")
+	intro.WriteString(uni("Este capítulo cluste e atribui os riscos por funções que são mais capazes de " +
+		"Verifique e mitigue-os: " +
+		"No total <b>" + strconv.Itoa(model.TotalRiskCount()) + " Riscos potenciais </ b> foram identificados durante o processo de modelagem de ameaçase ameaças " +
+		"das quais <b>" + strconv.Itoa(countBusinessSideFunction) + " deve ser verificado por " + model.BusinessSide.Title() + "</b>, " +
+		"<b>" + strconv.Itoa(countArchitectureFunction) + " deve ser verificado por " + model.Architecture.Title() + "</b>, " +
+		"<b>" + strconv.Itoa(countDevelopmentFunction) + " deve ser verificado por " + model.Development.Title() + "</b>, " +
+		"e <b>" + strconv.Itoa(countOperationFunction) + " deve ser verificado por " + model.Operations.Title() + "</b>.<br>"))
 	html := pdf.HTMLBasicNew()
 	html.Write(5, intro.String())
 	intro.Reset()
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
 	pdfColorGray()
-	html.Write(5, "Risk finding paragraphs are clickable and link to the corresponding chapter.")
+	html.Write(5, uni("O risco de encontrar parágrafos são clicáveis e links para o capítulo correspondente."))
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 
 	oldLeft, _, _, _ := pdf.GetMargins()
@@ -1732,7 +1740,7 @@ func createAssignmentByFunction() {
 	}
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdf.SetTextColor(0, 0, 0)
-	html.Write(5, "<b>"+model.BusinessSide.Title()+"</b>")
+	html.Write(5, "<b>"+uni(model.BusinessSide.Title())+"</b>")
 	pdf.SetLeftMargin(15)
 	if len(risksBusinessSideFunction) == 0 {
 		pdf.SetTextColor(150, 150, 150)
@@ -1813,7 +1821,7 @@ func createAssignmentByFunction() {
 	}
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdf.SetTextColor(0, 0, 0)
-	html.Write(5, "<b>"+model.Operations.Title()+"</b>")
+	html.Write(5, "<b>"+uni(model.Operations.Title())+"</b>")
 	pdf.SetLeftMargin(15)
 	if len(risksOperationFunction) == 0 {
 		pdf.SetTextColor(150, 150, 150)
@@ -1837,8 +1845,9 @@ func createAssignmentByFunction() {
 }
 
 func createSTRIDE() {
+	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	pdf.SetTextColor(0, 0, 0)
-	title := "STRIDE Classification of Identified Risks"
+	title := uni("STRIDE Classificação de riscos identificados")
 	addHeadline(title, false)
 	defineLinkTarget("{stride}")
 	currentChapterTitleBreadcrumb = title
@@ -1857,20 +1866,20 @@ func createSTRIDE() {
 	countSTRIDEDenialOfService := model.CountRisks(risksSTRIDEDenialOfService)
 	countSTRIDEElevationOfPrivilege := model.CountRisks(risksSTRIDEElevationOfPrivilege)
 	var intro strings.Builder
-	intro.WriteString("This chapter clusters and classifies the risks by STRIDE categories: " +
-		"In total <b>" + strconv.Itoa(model.TotalRiskCount()) + " potential risks</b> have been identified during the threat modeling process " +
-		"of which <b>" + strconv.Itoa(countSTRIDESpoofing) + " in the " + model.Spoofing.Title() + "</b> category, " +
-		"<b>" + strconv.Itoa(countSTRIDETampering) + " in the " + model.Tampering.Title() + "</b> category, " +
-		"<b>" + strconv.Itoa(countSTRIDERepudiation) + " in the " + model.Repudiation.Title() + "</b> category, " +
-		"<b>" + strconv.Itoa(countSTRIDEInformationDisclosure) + " in the " + model.InformationDisclosure.Title() + "</b> category, " +
-		"<b>" + strconv.Itoa(countSTRIDEDenialOfService) + " in the " + model.DenialOfService.Title() + "</b> category, " +
-		"and <b>" + strconv.Itoa(countSTRIDEElevationOfPrivilege) + " in the " + model.ElevationOfPrivilege.Title() + "</b> category.<br>")
+	intro.WriteString(uni("Este capítulo agrupa e classifica os riscos por categorias STRIDE " +
+		"No total <b>" + strconv.Itoa(model.TotalRiskCount()) + " riscos potenciais</b> foram identificados durante o processo de modelagem de ameaças " +
+		"das quais são <b>" + strconv.Itoa(countSTRIDESpoofing) + " na categoria " + model.Spoofing.Title() + "</b>," +
+		"<b>" + strconv.Itoa(countSTRIDETampering) + " na categoria " + model.Tampering.Title() + "</b>, " +
+		"<b>" + strconv.Itoa(countSTRIDERepudiation) + " no categoria " + model.Repudiation.Title() + "</b>, " +
+		"<b>" + strconv.Itoa(countSTRIDEInformationDisclosure) + " no categoria " + model.InformationDisclosure.Title() + "</b>, " +
+		"<b>" + strconv.Itoa(countSTRIDEDenialOfService) + " no categoria " + model.DenialOfService.Title() + "</b>, " +
+		"e <b>" + strconv.Itoa(countSTRIDEElevationOfPrivilege) + " no categoria " + model.ElevationOfPrivilege.Title() + "</b>.<br>"))
 	html := pdf.HTMLBasicNew()
 	html.Write(5, intro.String())
 	intro.Reset()
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
 	pdfColorGray()
-	html.Write(5, "Risk finding paragraphs are clickable and link to the corresponding chapter.")
+	html.Write(5, uni("Os parágrafos de localização de risco são clicáveis e vinculados ao capítulo correspondente."))
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 
 	oldLeft, _, _, _ := pdf.GetMargins()
@@ -2044,13 +2053,13 @@ func createSTRIDE() {
 func createSecurityRequirements() {
 	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	pdf.SetTextColor(0, 0, 0)
-	chapTitle := "Security Requirements"
+	chapTitle := uni("Requisitos de segurança")
 	addHeadline(chapTitle, false)
 	defineLinkTarget("{security-requirements}")
 	currentChapterTitleBreadcrumb = chapTitle
 
 	html := pdf.HTMLBasicNew()
-	html.Write(5, "This chapter lists the custom security requirements which have been defined for the modeled target.")
+	html.Write(5, uni("Este capítulo lista os requisitos de segurança personalizados que foram definidos para o destino modelado."))
 	pdfColorBlack()
 	for _, title := range model.SortedKeysOfSecurityRequirements() {
 		description := model.ParsedModelRoot.SecurityRequirements[title]
@@ -2069,19 +2078,20 @@ func createSecurityRequirements() {
 	} else {
 		html.Write(5, "<br><br><br>")
 	}
-	html.Write(5, "<i>This list is not complete and regulatory or law relevant security requirements have to be "+
-		"taken into account as well. Also custom individual security requirements might exist for the project.</i>")
+	html.Write(5, uni("<i>Esta lista não é completa e reguladora ou requisitos de segurança relevantes da lei devem ser "+
+		"levado em conta também.Também existem requisitos de segurança individuais personalizados para o projeto.</i>"))
 }
 
 func createAbuseCases() {
+	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	pdf.SetTextColor(0, 0, 0)
-	chapTitle := "Abuse Cases"
+	chapTitle := uni("Casos de Abusos")
 	addHeadline(chapTitle, false)
 	defineLinkTarget("{abuse-cases}")
 	currentChapterTitleBreadcrumb = chapTitle
 
 	html := pdf.HTMLBasicNew()
-	html.Write(5, "This chapter lists the custom abuse cases which have been defined for the modeled target.")
+	html.Write(5, uni("Este capítulo lista os casos de abuso personalizado que foram definidos para o alvo modelado.odelado."))
 	pdfColorBlack()
 	for _, title := range model.SortedKeysOfAbuseCases() {
 		description := model.ParsedModelRoot.AbuseCases[title]
@@ -2091,8 +2101,8 @@ func createAbuseCases() {
 		} else {
 			html.Write(5, "<br><br><br>")
 		}
-		html.Write(5, "<b>"+title+"</b><br>")
-		html.Write(5, description)
+		html.Write(5, "<b>"+uni(title)+"</b><br>")
+		html.Write(5, uni(description))
 	}
 	if pdf.GetY() > 250 {
 		pageBreak()
@@ -2100,8 +2110,8 @@ func createAbuseCases() {
 	} else {
 		html.Write(5, "<br><br><br>")
 	}
-	html.Write(5, "<i>This list is not complete and regulatory or law relevant abuse cases have to be "+
-		"taken into account as well. Also custom individual abuse cases might exist for the project.</i>")
+	html.Write(5, uni("<i>Esta lista não é completa e regulamentar ou os casos de abuso relevantes da lei devem ser "+
+		"levado em consideração também. Também podem existir casos de abuso individuais personalizados para o projeto</i>"))
 }
 
 func createQuestions() {
@@ -2122,12 +2132,12 @@ func createQuestions() {
 	pdfColorBlack()
 
 	html := pdf.HTMLBasicNew()
-	html.Write(5, "This chapter lists custom questions that arose during the threat modeling process.")
+	html.Write(5, uni("Este capítulo lista questões personalizadas que surgiram durante o processo de modelagem de ameaças."))
 
 	if len(model.ParsedModelRoot.Questions) == 0 {
 		pdfColorLightGray()
 		html.Write(5, "<br><br><br>")
-		html.Write(5, "No custom questions arose during the threat modeling process.")
+		html.Write(5, uni("Nenhuma pergunta personalizada surgiu durante o processo de modelagem de ameaças."))
 	}
 	pdfColorBlack()
 	for _, question := range model.SortedKeysOfQuestions() {
@@ -2146,21 +2156,22 @@ func createQuestions() {
 			colors.ColorModelFailure(pdf)
 			html.Write(5, "<b>"+uni(question)+"</b><br>")
 			pdfColorLightGray()
-			html.Write(5, "<i>- answer pending -</i>")
+			html.Write(5, "<i>- resposta pendente -</i>")
 			pdfColorBlack()
 		}
 	}
 }
 
 func createTagListing() {
+	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	pdf.SetTextColor(0, 0, 0)
-	chapTitle := "Tag Listing"
+	chapTitle := uni("Listagem de tags")
 	addHeadline(chapTitle, false)
 	defineLinkTarget("{tag-listing}")
 	currentChapterTitleBreadcrumb = chapTitle
 
 	html := pdf.HTMLBasicNew()
-	html.Write(5, "This chapter lists what tags are used by which elements.")
+	html.Write(5, uni("Este capítulo lista quais tags são usadas por quais elementos."))
 	pdfColorBlack()
 	sorted := model.ParsedModelRoot.TagsAvailable
 	sort.Strings(sorted)
@@ -2214,7 +2225,7 @@ func createTagListing() {
 				html.Write(5, "<br><br><br>")
 			}
 			pdfColorBlack()
-			html.Write(5, "<b>"+tag+"</b><br>")
+			html.Write(5, uni("<b>"+tag+"</b><br>"))
 			html.Write(5, description)
 		}
 	}
@@ -2223,21 +2234,21 @@ func createTagListing() {
 func createRiskCategories() {
 	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	// category title
-	title := "Identified Risks by Vulnerability Category"
+	title := uni("Riscos identificados por categoria de vulnerabilidade")
 	pdfColorBlack()
 	addHeadline(title, false)
 	defineLinkTarget("{intro-risks-by-vulnerability-category}")
 	html := pdf.HTMLBasicNew()
 	var text strings.Builder
-	text.WriteString("In total <b>" + strconv.Itoa(model.TotalRiskCount()) + " potential risks</b> have been identified during the threat modeling process " +
-		"of which " +
-		"<b>" + strconv.Itoa(len(model.FilteredByOnlyCriticalRisks())) + " are rated as critical</b>, " +
-		"<b>" + strconv.Itoa(len(model.FilteredByOnlyHighRisks())) + " as high</b>, " +
-		"<b>" + strconv.Itoa(len(model.FilteredByOnlyElevatedRisks())) + " as elevated</b>, " +
-		"<b>" + strconv.Itoa(len(model.FilteredByOnlyMediumRisks())) + " as medium</b>, " +
-		"and <b>" + strconv.Itoa(len(model.FilteredByOnlyLowRisks())) + " as low</b>. " +
-		"<br><br>These risks are distributed across <b>" + strconv.Itoa(len(model.GeneratedRisksByCategory)) + " vulnerability categories</b>. ")
-	text.WriteString("The following sub-chapters of this section describe each identified risk category.") // TODO more explanation text
+	text.WriteString(uni("No total <b>" + strconv.Itoa(model.TotalRiskCount()) + " riscos potenciais</b> foram identificados durante o processo de modelagem de ameaças " +
+		"das quais " +
+		"<b>" + strconv.Itoa(len(model.FilteredByOnlyCriticalRisks())) + " são classificados como críticos</b>, " +
+		"<b>" + strconv.Itoa(len(model.FilteredByOnlyHighRisks())) + " tão alto</b>, " +
+		"<b>" + strconv.Itoa(len(model.FilteredByOnlyElevatedRisks())) + " tão elevado</b>, " +
+		"<b>" + strconv.Itoa(len(model.FilteredByOnlyMediumRisks())) + " como meio</b>, " +
+		"and <b>" + strconv.Itoa(len(model.FilteredByOnlyLowRisks())) + " tão baixo</b>. " +
+		"<br><br>Esses riscos são distribuídos entre <b>" + strconv.Itoa(len(model.GeneratedRisksByCategory)) + " categorias de vulnerabilidade</b>. "))
+	text.WriteString(uni("Os subcapítulos a seguir desta seção descrevem cada categoria de risco identificada")) // TODO more explanation text
 	html.Write(5, text.String())
 	text.Reset()
 	currentChapterTitleBreadcrumb = title
@@ -2282,30 +2293,30 @@ func createRiskCategories() {
 			cweLink = "<a href=\"https://cwe.mitre.org/data/definitions/" + strconv.Itoa(category.CWE) + ".html\">CWE " +
 				strconv.Itoa(category.CWE) + "</a>"
 		}
-		text.WriteString("<b>Description</b> (" + category.STRIDE.Title() + "): " + cweLink + "<br><br>")
-		text.WriteString(category.Description)
-		text.WriteString("<br><br><br><b>Impact</b><br><br>")
-		text.WriteString(category.Impact)
-		text.WriteString("<br><br><br><b>Detection Logic</b><br><br>")
-		text.WriteString(category.DetectionLogic)
-		text.WriteString("<br><br><br><b>Risk Rating</b><br><br>")
-		text.WriteString(category.RiskAssessment)
+		text.WriteString(uni("<b>Descrição</b> (" + category.STRIDE.Title() + "): " + cweLink + "<br><br>"))
+		text.WriteString(uni(category.Description))
+		text.WriteString(uni("<br><br><br><b>Impacto</b><br><br>"))
+		text.WriteString(uni(category.Impact))
+		text.WriteString(uni("<br><br><br><b>Lógica de detecção</b><br><br>"))
+		text.WriteString(uni(category.DetectionLogic))
+		text.WriteString(uni("<br><br><br><b>Classificação de risco</b><br><br>"))
+		text.WriteString(uni(category.RiskAssessment))
 		html.Write(5, text.String())
 		text.Reset()
 		colors.ColorRiskStatusFalsePositive(pdf)
-		text.WriteString("<br><br><br><b>False Positives</b><br><br>")
-		text.WriteString(category.FalsePositives)
+		text.WriteString("<br><br><br><b>Falso-Positivos</b><br><br>")
+		text.WriteString(uni(category.FalsePositives))
 		html.Write(5, text.String())
 		text.Reset()
 		colors.ColorRiskStatusMitigated(pdf)
-		text.WriteString("<br><br><br><b>Mitigation</b> (" + category.Function.Title() + "): " + category.Action + "<br><br>")
-		text.WriteString(category.Mitigation)
+		text.WriteString(uni("<br><br><br><b>Mitigação</b> (" + category.Function.Title() + "): " + category.Action + "<br><br>"))
+		text.WriteString(uni(category.Mitigation))
 
 		asvsChapter := category.ASVS
 		if len(asvsChapter) == 0 {
-			text.WriteString("<br><br>ASVS Chapter: n/a")
+			text.WriteString(uni("<br><br>ASVS Chapter: n/a"))
 		} else {
-			text.WriteString("<br><br>ASVS Chapter: <a href=\"https://owasp.org/www-project-application-security-verification-standard/\">" + asvsChapter + "</a>")
+			text.WriteString(uni("<br><br>ASVS Chapter: <a href=\"https://owasp.org/www-project-application-security-verification-standard/\">" + asvsChapter + "</a>"))
 		}
 
 		cheatSheetLink := category.CheatSheet
@@ -2320,10 +2331,10 @@ func createRiskCategories() {
 			}
 			cheatSheetLink = "<a href=\"" + cheatSheetLink + "\">" + linkText + "</a>"
 		}
-		text.WriteString("<br>Cheat Sheet: " + cheatSheetLink)
+		text.WriteString(uni("<br>Cheat Sheet: " + cheatSheetLink))
 
 		text.WriteString("<br><br><br><b>Check</b><br><br>")
-		text.WriteString(category.Check)
+		text.WriteString(uni(category.Check))
 
 		html.Write(5, text.String())
 		text.Reset()
@@ -2332,19 +2343,19 @@ func createRiskCategories() {
 		// risk details
 		pageBreak()
 		pdf.SetY(36)
-		text.WriteString("<b>Risk Findings</b><br><br>")
+		text.WriteString(uni("<b>Descobertas de risco</b><br><br>"))
 		times := strconv.Itoa(len(risks)) + " time"
 		if len(risks) > 1 {
 			times += "s"
 		}
-		text.WriteString("The risk <b>" + category.Title + "</b> was found <b>" + times + "</b> in the analyzed architecture to be " +
-			"potentially possible. Each spot should be checked individually by reviewing the implementation whether all " +
-			"controls have been applied properly in order to mitigate each risk.<br>")
+		text.WriteString(uni("O risco <b>" + uni(category.Title) + "</b> foi encontrado em <b>" + times + "</b> na arquitetura analisada como sendo " +
+			"potencialmente possível. Cada local deve ser verificado individualmente, analisando a implementação se todos " +
+			"os controles foram aplicados de forma adequada a fim de mitigar cada risco.<br>"))
 		html.Write(5, text.String())
 		text.Reset()
 		pdf.SetFont("Helvetica", "", fontSizeSmall)
 		pdfColorGray()
-		html.Write(5, "Risk finding paragraphs are clickable and link to the corresponding chapter.<br>")
+		html.Write(5, uni("Os parágrafos de localização de risco são clicáveis e têm um link para o capítulo correspondente.<br>"))
 		pdf.SetFont("Helvetica", "", fontSizeBody)
 		oldLeft, _, _, _ := pdf.GetMargins()
 		headlineCriticalWritten, headlineHighWritten, headlineElevatedWritten, headlineMediumWritten, headlineLowWritten := false, false, false, false, false
@@ -2362,7 +2373,7 @@ func createRiskCategories() {
 				if !headlineCriticalWritten {
 					pdf.SetFont("Helvetica", "", fontSizeBody)
 					pdf.SetLeftMargin(oldLeft)
-					text.WriteString("<br><b><i>Critical Risk Severity</i></b><br><br>")
+					text.WriteString(uni("<br><b><i>Critical Risk Severity</i></b><br><br>"))
 					html.Write(5, text.String())
 					text.Reset()
 					headlineCriticalWritten = true
@@ -2372,7 +2383,7 @@ func createRiskCategories() {
 				if !headlineHighWritten {
 					pdf.SetFont("Helvetica", "", fontSizeBody)
 					pdf.SetLeftMargin(oldLeft)
-					text.WriteString("<br><b><i>High Risk Severity</i></b><br><br>")
+					text.WriteString(uni("<br><b><i>High Risk Severity</i></b><br><br>"))
 					html.Write(5, text.String())
 					text.Reset()
 					headlineHighWritten = true
@@ -2382,7 +2393,7 @@ func createRiskCategories() {
 				if !headlineElevatedWritten {
 					pdf.SetFont("Helvetica", "", fontSizeBody)
 					pdf.SetLeftMargin(oldLeft)
-					text.WriteString("<br><b><i>Elevated Risk Severity</i></b><br><br>")
+					text.WriteString(uni("<br><b><i>Elevated Risk Severity</i></b><br><br>"))
 					html.Write(5, text.String())
 					text.Reset()
 					headlineElevatedWritten = true
@@ -2392,7 +2403,7 @@ func createRiskCategories() {
 				if !headlineMediumWritten {
 					pdf.SetFont("Helvetica", "", fontSizeBody)
 					pdf.SetLeftMargin(oldLeft)
-					text.WriteString("<br><b><i>Medium Risk Severity</i></b><br><br>")
+					text.WriteString(uni("<br><b><i>Medium Risk Severity</i></b><br><br>"))
 					html.Write(5, text.String())
 					text.Reset()
 					headlineMediumWritten = true
@@ -2402,7 +2413,7 @@ func createRiskCategories() {
 				if !headlineLowWritten {
 					pdf.SetFont("Helvetica", "", fontSizeBody)
 					pdf.SetLeftMargin(oldLeft)
-					text.WriteString("<br><b><i>Low Risk Severity</i></b><br><br>")
+					text.WriteString(uni("<br><b><i>Low Risk Severity</i></b><br><br>"))
 					html.Write(5, text.String())
 					text.Reset()
 					headlineLowWritten = true
@@ -2416,7 +2427,7 @@ func createRiskCategories() {
 			posY := pdf.GetY()
 			pdf.SetLeftMargin(oldLeft + 10)
 			pdf.SetFont("Helvetica", "", fontSizeBody)
-			text.WriteString(uni(risk.Title) + ": Exploitation likelihood is <i>" + risk.ExploitationLikelihood.Title() + "</i> with <i>" + risk.ExploitationImpact.Title() + "</i> impact.")
+			text.WriteString(uni(risk.Title + ": A probabilidade de exploração é <i>" + risk.ExploitationLikelihood.Title() + "</i> com <i>" + risk.ExploitationImpact.Title() + "</i> impacto."))
 			text.WriteString("<br>")
 			html.Write(5, text.String())
 			text.Reset()
@@ -2490,22 +2501,22 @@ func writeRiskTrackingStatus(risk model.Risk) {
 func createTechnicalAssets() {
 	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	// category title
-	title := "Identified Risks by Technical Asset"
+	title := uni("Riscos Identificados por Ativo Técnico")
 	pdfColorBlack()
 	addHeadline(title, false)
 	defineLinkTarget("{intro-risks-by-technical-asset}")
 	html := pdf.HTMLBasicNew()
 	var text strings.Builder
-	text.WriteString("In total <b>" + strconv.Itoa(model.TotalRiskCount()) + " potential risks</b> have been identified during the threat modeling process " +
-		"of which " +
+	text.WriteString(uni("No total <b>" + strconv.Itoa(model.TotalRiskCount()) + " riscos potenciais</b> foram identificados durante o processo de modelagem de ameaças " +
+		"das quais " +
 		"<b>" + strconv.Itoa(len(model.FilteredByOnlyCriticalRisks())) + " are rated as critical</b>, " +
 		"<b>" + strconv.Itoa(len(model.FilteredByOnlyHighRisks())) + " as high</b>, " +
 		"<b>" + strconv.Itoa(len(model.FilteredByOnlyElevatedRisks())) + " as elevated</b>, " +
 		"<b>" + strconv.Itoa(len(model.FilteredByOnlyMediumRisks())) + " as medium</b>, " +
 		"and <b>" + strconv.Itoa(len(model.FilteredByOnlyLowRisks())) + " as low</b>. " +
-		"<br><br>These risks are distributed across <b>" + strconv.Itoa(len(model.InScopeTechnicalAssets())) + " in-scope technical assets</b>. ")
-	text.WriteString("The following sub-chapters of this section describe each identified risk grouped by technical asset. ") // TODO more explanation text
-	text.WriteString("The RAA value of a technical asset is the calculated \"Relative Attacker Attractiveness\" value in percent.")
+		"<br><br>Esses riscos são distribuídos entre <b>" + strconv.Itoa(len(model.InScopeTechnicalAssets())) + " ativos técnicos dentro do escopo</b>. "))
+	text.WriteString(uni("Os seguintes subcapítulos desta seção descrevem cada risco identificado agrupado por ativo técnico. ")) // TODO more explanation text
+	text.WriteString(uni("O valor RAA de um ativo técnico é o calculado \"Atratividade relativa do atacante\" valor em porcentagem."))
 	html.Write(5, text.String())
 	text.Reset()
 	currentChapterTitleBreadcrumb = title
@@ -2549,7 +2560,7 @@ func createTechnicalAssets() {
 		// asset description
 		html := pdf.HTMLBasicNew()
 		var text strings.Builder
-		text.WriteString("<b>Description</b><br><br>")
+		text.WriteString(uni("<b>Description</b><br><br>"))
 		text.WriteString(uni(technicalAsset.Description))
 		html.Write(5, text.String())
 		text.Reset()
@@ -2570,7 +2581,7 @@ func createTechnicalAssets() {
 		oldLeft, _, _, _ := pdf.GetMargins()
 		if len(risks) > 0 {
 			pdf.SetFont("Helvetica", "", fontSizeSmall)
-			html.Write(5, "Risk finding paragraphs are clickable and link to the corresponding chapter.")
+			html.Write(5, uni("O risco de encontrar parágrafos são clicáveis e links para o capítulo correspondente."))
 			pdf.SetFont("Helvetica", "", fontSizeBody)
 			pdf.SetLeftMargin(15)
 			/*
@@ -2596,7 +2607,7 @@ func createTechnicalAssets() {
 					if !headlineCriticalWritten {
 						pdf.SetFont("Helvetica", "", fontSizeBody)
 						pdf.SetLeftMargin(oldLeft + 3)
-						html.Write(5, "<br><b><i>Critical Risk Severity</i></b><br><br>")
+						html.Write(5, uni("<br><b><i>Gravidade de risco crítico</i></b><br><br>"))
 						headlineCriticalWritten = true
 					}
 				case model.HighSeverity:
@@ -2604,7 +2615,7 @@ func createTechnicalAssets() {
 					if !headlineHighWritten {
 						pdf.SetFont("Helvetica", "", fontSizeBody)
 						pdf.SetLeftMargin(oldLeft + 3)
-						html.Write(5, "<br><b><i>High Risk Severity</i></b><br><br>")
+						html.Write(5, uni("<br><b><i>High Risk Severity</i></b><br><br>"))
 						headlineHighWritten = true
 					}
 				case model.ElevatedSeverity:
@@ -2612,7 +2623,7 @@ func createTechnicalAssets() {
 					if !headlineElevatedWritten {
 						pdf.SetFont("Helvetica", "", fontSizeBody)
 						pdf.SetLeftMargin(oldLeft + 3)
-						html.Write(5, "<br><b><i>Elevated Risk Severity</i></b><br><br>")
+						html.Write(5, uni("<br><b><i>Elevated Risk Severity</i></b><br><br>"))
 						headlineElevatedWritten = true
 					}
 				case model.MediumSeverity:
@@ -2620,7 +2631,7 @@ func createTechnicalAssets() {
 					if !headlineMediumWritten {
 						pdf.SetFont("Helvetica", "", fontSizeBody)
 						pdf.SetLeftMargin(oldLeft + 3)
-						html.Write(5, "<br><b><i>Medium Risk Severity</i></b><br><br>")
+						html.Write(5, uni("<br><b><i>Medium Risk Severity</i></b><br><br>"))
 						headlineMediumWritten = true
 					}
 				case model.LowSeverity:
@@ -2628,7 +2639,7 @@ func createTechnicalAssets() {
 					if !headlineLowWritten {
 						pdf.SetFont("Helvetica", "", fontSizeBody)
 						pdf.SetLeftMargin(oldLeft + 3)
-						html.Write(5, "<br><b><i>Low Risk Severity</i></b><br><br>")
+						html.Write(5, uni("<br><b><i>Low Risk Severity</i></b><br><br>"))
 						headlineLowWritten = true
 					}
 				default:
@@ -2640,7 +2651,7 @@ func createTechnicalAssets() {
 				posY := pdf.GetY()
 				pdf.SetLeftMargin(oldLeft + 10)
 				pdf.SetFont("Helvetica", "", fontSizeBody)
-				text.WriteString(uni(risk.Title) + ": Exploitation likelihood is <i>" + risk.ExploitationLikelihood.Title() + "</i> with <i>" + risk.ExploitationImpact.Title() + "</i> impact.")
+				text.WriteString(uni(uni(risk.Title) + ": A probabilidade de exploração é <i>" + risk.ExploitationLikelihood.Title() + "</i> com <i>" + risk.ExploitationImpact.Title() + "</i> impacto."))
 				text.WriteString("<br>")
 				html.Write(5, text.String())
 				text.Reset()
@@ -2659,9 +2670,9 @@ func createTechnicalAssets() {
 			pdfColorGray()
 			pdf.SetFont("Helvetica", "", fontSizeBody)
 			pdf.SetLeftMargin(15)
-			text := "No risks were identified."
+			text := uni("Nenhum riscos foi identificado.icado.cado.")
 			if technicalAsset.OutOfScope {
-				text = "Asset was defined as out-of-scope."
+				text = uni("O ativo foi definido como fora do escopo.")
 			}
 			html.Write(5, text)
 			pdf.Ln(-1)
@@ -2676,7 +2687,7 @@ func createTechnicalAssets() {
 		}
 		pdfColorBlack()
 		pdf.SetFont("Helvetica", "B", fontSizeBody)
-		pdf.CellFormat(190, 6, "Asset Information", "0", 0, "", false, 0, "")
+		pdf.CellFormat(190, 6, "Informação de Ativos", "0", 0, "", false, 0, "")
 		pdf.Ln(-1)
 		pdf.Ln(-1)
 		pdf.SetFont("Helvetica", "", fontSizeBody)
@@ -2868,7 +2879,7 @@ func createTechnicalAssets() {
 		}
 		if len(formatsAcceptedText) == 0 {
 			pdfColorGray()
-			formatsAcceptedText = "none of the special data formats accepted"
+			formatsAcceptedText = uni("none of the special data formats accepted")
 		}
 		pdf.MultiCell(145, 6, formatsAcceptedText, "0", "0", false)
 
@@ -2880,7 +2891,7 @@ func createTechnicalAssets() {
 		}
 		pdfColorBlack()
 		pdf.SetFont("Helvetica", "B", fontSizeBody)
-		pdf.CellFormat(190, 6, "Asset Rating", "0", 0, "", false, 0, "")
+		pdf.CellFormat(190, 6, "Classificação de ativos", "0", 0, "", false, 0, "")
 		pdf.Ln(-1)
 		pdf.Ln(-1)
 		pdf.SetFont("Helvetica", "", fontSizeBody)
@@ -2947,7 +2958,7 @@ func createTechnicalAssets() {
 			}
 			pdfColorBlack()
 			pdf.SetFont("Helvetica", "B", fontSizeBody)
-			pdf.CellFormat(190, 6, "Asset Out-of-Scope Justification", "0", 0, "", false, 0, "")
+			pdf.CellFormat(190, 6, "Justificativa de ativo fora do escopo", "0", 0, "", false, 0, "")
 			pdf.Ln(-1)
 			pdf.Ln(-1)
 			pdf.SetFont("Helvetica", "", fontSizeBody)
@@ -2964,10 +2975,10 @@ func createTechnicalAssets() {
 			}
 			pdfColorBlack()
 			pdf.SetFont("Helvetica", "B", fontSizeBody)
-			pdf.CellFormat(190, 6, "Outgoing Communication Links: "+strconv.Itoa(len(technicalAsset.CommunicationLinks)), "0", 0, "", false, 0, "")
+			pdf.CellFormat(190, 6, "Links de comunicação de saída: "+strconv.Itoa(len(technicalAsset.CommunicationLinks)), "0", 0, "", false, 0, "")
 			pdf.SetFont("Helvetica", "", fontSizeSmall)
 			pdfColorGray()
-			html.Write(5, "Target technical asset names are clickable and link to the corresponding chapter.")
+			html.Write(5, uni("Os nomes de ativos técnicos de destino são clicáveis e links para o capítulo correspondente."))
 			pdf.SetFont("Helvetica", "", fontSizeBody)
 			pdf.Ln(-1)
 			pdf.Ln(-1)
@@ -3137,7 +3148,7 @@ func createTechnicalAssets() {
 			pdf.CellFormat(190, 6, "Incoming Communication Links: "+strconv.Itoa(len(incomingCommLinks)), "0", 0, "", false, 0, "")
 			pdf.SetFont("Helvetica", "", fontSizeSmall)
 			pdfColorGray()
-			html.Write(5, "Source technical asset names are clickable and link to the corresponding chapter.")
+			html.Write(5, uni("Nomes de ativos técnicos de origem são clicáveis e links para o capítulo correspondente."))
 			pdf.SetFont("Helvetica", "", fontSizeBody)
 			pdf.Ln(-1)
 			pdf.Ln(-1)
@@ -3301,23 +3312,23 @@ func createTechnicalAssets() {
 
 func createDataAssets() {
 	uni := pdf.UnicodeTranslatorFromDescriptor("")
-	title := "Identified Data Breach Probabilities by Data Asset"
+	title := uni("Probabilidades de violação de dados identificadas por ativo")
 	pdfColorBlack()
 	addHeadline(title, false)
 	defineLinkTarget("{intro-risks-by-data-asset}")
 	html := pdf.HTMLBasicNew()
-	html.Write(5, "In total <b>"+strconv.Itoa(model.TotalRiskCount())+" potential risks</b> have been identified during the threat modeling process "+
-		"of which "+
+	html.Write(5, uni("No total <b>"+strconv.Itoa(model.TotalRiskCount())+" riscos potenciais</b> foram identificados durante o processo de modelagem de ameaças "+
+		"das quais "+
 		"<b>"+strconv.Itoa(len(model.FilteredByOnlyCriticalRisks()))+" are rated as critical</b>, "+
 		"<b>"+strconv.Itoa(len(model.FilteredByOnlyHighRisks()))+" as high</b>, "+
 		"<b>"+strconv.Itoa(len(model.FilteredByOnlyElevatedRisks()))+" as elevated</b>, "+
 		"<b>"+strconv.Itoa(len(model.FilteredByOnlyMediumRisks()))+" as medium</b>, "+
 		"and <b>"+strconv.Itoa(len(model.FilteredByOnlyLowRisks()))+" as low</b>. "+
-		"<br><br>These risks are distributed across <b>"+strconv.Itoa(len(model.ParsedModelRoot.DataAssets))+" data assets</b>. ")
-	html.Write(5, "The following sub-chapters of this section describe the derived data breach probabilities grouped by data asset.<br>") // TODO more explanation text
+		"<br><br>Esses riscos são distribuídos entre <b>"+strconv.Itoa(len(model.ParsedModelRoot.DataAssets))+" ativos de dados</b>. "))
+	html.Write(5, uni("Os subcapítulos a seguir desta seção descrevem as probabilidades derivadas de violação de dados agrupadas por ativo de dados.<br>")) // TODO more explanation text
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
 	pdfColorGray()
-	html.Write(5, "Technical asset names and risk IDs are clickable and link to the corresponding chapter.")
+	html.Write(5, uni("Nomes de ativos técnicos e IDs de risco são clicáveis e vinculam ao capítulo correspondente."))
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	currentChapterTitleBreadcrumb = title
 	for _, dataAsset := range model.SortedDataAssetsByDataBreachProbabilityAndTitle() {
@@ -3681,15 +3692,15 @@ func createDataAssets() {
 		pdf.CellFormat(40, 6, "Data Breach Risks:", "0", 0, "", false, 0, "")
 		if len(dataBreachRisksStillAtRisk) == 0 {
 			pdfColorGray()
-			pdf.MultiCell(145, 6, "This data asset has no data breach potential.", "0", "0", false)
+			pdf.MultiCell(145, 6, uni("Este ativo de dados não tem potencial de violação de dados."), "0", "0", false)
 		} else {
 			pdfColorBlack()
 			riskRemainingStr := "risks"
 			if countStillAtRisk == 1 {
 				riskRemainingStr = "risk"
 			}
-			pdf.MultiCell(145, 6, "This data asset has data breach potential because of "+
-				""+strconv.Itoa(countStillAtRisk)+" remaining "+riskRemainingStr+":", "0", "0", false)
+			pdf.MultiCell(145, 6, uni("Este ativo de dados tem potencial de violação de dados devido a "+
+				""+strconv.Itoa(countStillAtRisk)+" remaining "+riskRemainingStr+":"), "0", "0", false)
 			for _, dataBreachRisk := range dataBreachRisksStillAtRisk {
 				if pdf.GetY() > 280 { // 280 as only small font here
 					pageBreak()
@@ -3731,8 +3742,8 @@ func createTrustBoundaries() {
 	if len(model.ParsedModelRoot.TrustBoundaries) > 1 {
 		word = "have"
 	}
-	html.Write(5, "In total <b>"+strconv.Itoa(len(model.ParsedModelRoot.TrustBoundaries))+" trust boundaries</b> "+word+" been "+
-		"modeled during the threat modeling process.")
+	html.Write(5, uni("No total <b>"+strconv.Itoa(len(model.ParsedModelRoot.TrustBoundaries))+" trust boundaries</b> "+word+" estive "+
+		"modelado durante o processo de modelagem de ameaças. "))
 	currentChapterTitleBreadcrumb = title
 	for _, trustBoundary := range model.SortedTrustBoundariesByTitle() {
 		if pdf.GetY() > 250 {
@@ -3841,7 +3852,7 @@ func createTrustBoundaries() {
 
 func createSharedRuntimes() {
 	uni := pdf.UnicodeTranslatorFromDescriptor("")
-	title := "Shared Runtimes"
+	title := uni("Shared Runtimes")
 	pdfColorBlack()
 	addHeadline(title, false)
 
@@ -3850,8 +3861,8 @@ func createSharedRuntimes() {
 	if len(model.ParsedModelRoot.SharedRuntimes) > 1 {
 		word, runtime = "have", "runtimes"
 	}
-	html.Write(5, "In total <b>"+strconv.Itoa(len(model.ParsedModelRoot.SharedRuntimes))+" shared "+runtime+"</b> "+word+" been "+
-		"modeled during the threat modeling process.")
+	html.Write(5, uni("In total <b>"+strconv.Itoa(len(model.ParsedModelRoot.SharedRuntimes))+" shared "+runtime+"</b> "+word+" been "+
+		"modeled during the threat modeling process."))
 	currentChapterTitleBreadcrumb = title
 	for _, sharedRuntime := range model.SortedSharedRuntimesByTitle() {
 		pdfColorBlack()
@@ -3921,8 +3932,9 @@ func createSharedRuntimes() {
 }
 
 func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTimestamp string, modelHash string, customRiskRules map[string]model.CustomRiskRule) {
+	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	pdf.SetTextColor(0, 0, 0)
-	title := "Risk Rules Checked by Threagile"
+	title := uni("Regras de risco verificadas por Threagile")
 	addHeadline(title, false)
 	defineLinkTarget("{risk-rules-checked}")
 	currentChapterTitleBreadcrumb = title
@@ -3941,10 +3953,10 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	strBuilder.Reset()
 	pdfColorBlack()
 	pdf.SetFont("Helvetica", "", fontSizeBody)
-	strBuilder.WriteString("<br><br>Threagile (see <a href=\"https://threagile.io\">https://threagile.io</a> for more details) is an open-source toolkit for agile threat modeling, created by Christian Schneider (<a href=\"https://christian-schneider.net\">https://christian-schneider.net</a>): It allows to model an architecture with its assets in an agile fashion as a YAML file " +
-		"directly inside the IDE. Upon execution of the Threagile toolkit all standard risk rules (as well as individual custom rules if present) " +
-		"are checked against the architecture model. At the time the Threagile toolkit was executed on the model input file " +
-		"the following risk rules were checked:")
+	strBuilder.WriteString(uni("<br><br>Threagile (see <a href=\"https://threagile.io\">https://threagile.io</a> é um kit de ferramentas de código aberto para modelagem ágil de ameaças, criado por Christian Schneider (<a href=\"https://christian-schneider.net\">https://christian-schneider.net</a>): isto permite modelar uma arquitetura com seus ativos de forma ágil como um arquivo YAML " +
+		"diretamente dentro do IDE. Após a execução do kit de ferramentas Threagile, todas as regras de risco padrão (bem como regras personalizadas individuais, se houver) " +
+		"são verificados em relação ao modelo de arquitetura. No momento em que o kit de ferramentas Threagile foi executado no arquivo de entrada do modelo " +
+		"as seguintes regras de risco foram verificadas:"))
 	html.Write(5, strBuilder.String())
 	strBuilder.Reset()
 
@@ -3961,7 +3973,7 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 		} else {
 			skipped = ""
 		}
-		pdf.CellFormat(190, 3, skipped+customRule.Category().Title, "0", 0, "", false, 0, "")
+		pdf.CellFormat(190, 3, uni(skipped+customRule.Category().Title), "0", 0, "", false, 0, "")
 		pdf.Ln(-1)
 		pdf.SetFont("Helvetica", "", fontSizeSmall)
 		pdf.CellFormat(190, 6, id, "0", 0, "", false, 0, "")
@@ -3974,32 +3986,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 		pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 		pdfColorBlack()
-		pdf.MultiCell(160, 6, customRule.Category().STRIDE.Title(), "0", "0", false)
+		pdf.MultiCell(160, 6, uni(customRule.Category().STRIDE.Title()), "0", "0", false)
 		pdfColorGray()
 		pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 		pdfColorBlack()
-		pdf.MultiCell(160, 6, firstParagraph(customRule.Category().Description), "0", "0", false)
+		pdf.MultiCell(160, 6, uni(firstParagraph(customRule.Category().Description)), "0", "0", false)
 		pdfColorGray()
 		pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 		pdfColorBlack()
-		pdf.MultiCell(160, 6, customRule.Category().DetectionLogic, "0", "0", false)
+		pdf.MultiCell(160, 6, uni(customRule.Category().DetectionLogic), "0", "0", false)
 		pdfColorGray()
 		pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 		pdfColorBlack()
-		pdf.MultiCell(160, 6, customRule.Category().RiskAssessment, "0", "0", false)
+		pdf.MultiCell(160, 6, uni(customRule.Category().RiskAssessment), "0", "0", false)
 	}
 
 	for _, key := range model.SortedKeysOfIndividualRiskCategories() {
 		indivRiskCat := model.ParsedModelRoot.IndividualRiskCategories[key]
 		pdf.Ln(-1)
 		pdf.SetFont("Helvetica", "B", fontSizeBody)
-		pdf.CellFormat(190, 3, indivRiskCat.Title, "0", 0, "", false, 0, "")
+		pdf.CellFormat(190, 3, uni(indivRiskCat.Title), "0", 0, "", false, 0, "")
 		pdf.Ln(-1)
 		pdf.SetFont("Helvetica", "", fontSizeSmall)
-		pdf.CellFormat(190, 6, indivRiskCat.Id, "0", 0, "", false, 0, "")
+		pdf.CellFormat(190, 6, uni(indivRiskCat.Id), "0", 0, "", false, 0, "")
 		pdf.Ln(-1)
 		pdf.SetFont("Helvetica", "I", fontSizeBody)
 		pdf.CellFormat(190, 6, "Individual Risk Category", "0", 0, "", false, 0, "")
@@ -4009,22 +4021,22 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 		pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 		pdfColorBlack()
-		pdf.MultiCell(160, 6, indivRiskCat.STRIDE.Title(), "0", "0", false)
+		pdf.MultiCell(160, 6, uni(indivRiskCat.STRIDE.Title()), "0", "0", false)
 		pdfColorGray()
 		pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 		pdfColorBlack()
-		pdf.MultiCell(160, 6, firstParagraph(indivRiskCat.Description), "0", "0", false)
+		pdf.MultiCell(160, 6, uni(firstParagraph(indivRiskCat.Description)), "0", "0", false)
 		pdfColorGray()
 		pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 		pdfColorBlack()
-		pdf.MultiCell(160, 6, indivRiskCat.DetectionLogic, "0", "0", false)
+		pdf.MultiCell(160, 6, uni(indivRiskCat.DetectionLogic), "0", "0", false)
 		pdfColorGray()
 		pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 		pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 		pdfColorBlack()
-		pdf.MultiCell(160, 6, indivRiskCat.RiskAssessment, "0", "0", false)
+		pdf.MultiCell(160, 6, uni(indivRiskCat.RiskAssessment), "0", "0", false)
 	}
 
 	pdf.Ln(-1)
@@ -4034,32 +4046,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+accidental_secret_leak.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+accidental_secret_leak.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, accidental_secret_leak.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(accidental_secret_leak.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, accidental_secret_leak.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(accidental_secret_leak.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(accidental_secret_leak.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(accidental_secret_leak.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, accidental_secret_leak.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(accidental_secret_leak.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, accidental_secret_leak.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(accidental_secret_leak.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4068,32 +4080,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+code_backdooring.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+code_backdooring.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, code_backdooring.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(code_backdooring.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, code_backdooring.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(code_backdooring.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(code_backdooring.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(code_backdooring.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, code_backdooring.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(code_backdooring.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, code_backdooring.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(code_backdooring.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4102,32 +4114,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+container_baseimage_backdooring.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+container_baseimage_backdooring.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, container_baseimage_backdooring.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(container_baseimage_backdooring.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, container_baseimage_backdooring.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(container_baseimage_backdooring.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(container_baseimage_backdooring.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(container_baseimage_backdooring.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, container_baseimage_backdooring.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(container_baseimage_backdooring.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, container_baseimage_backdooring.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(container_baseimage_backdooring.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4136,32 +4148,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+container_platform_escape.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+container_platform_escape.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, container_platform_escape.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(container_platform_escape.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, container_platform_escape.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(container_platform_escape.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(container_platform_escape.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(container_platform_escape.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, container_platform_escape.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(container_platform_escape.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, container_platform_escape.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(container_platform_escape.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4170,32 +4182,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+cross_site_request_forgery.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+cross_site_request_forgery.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, cross_site_request_forgery.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(cross_site_request_forgery.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, cross_site_request_forgery.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(cross_site_request_forgery.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(cross_site_request_forgery.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(cross_site_request_forgery.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, cross_site_request_forgery.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(cross_site_request_forgery.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, cross_site_request_forgery.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(cross_site_request_forgery.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4207,29 +4219,29 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	pdf.CellFormat(190, 3, skipped+cross_site_scripting.Category().Title, "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, cross_site_scripting.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(cross_site_scripting.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, cross_site_scripting.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(cross_site_scripting.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(cross_site_scripting.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(cross_site_scripting.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, cross_site_scripting.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(cross_site_scripting.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, cross_site_scripting.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(cross_site_scripting.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4238,32 +4250,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+dos_risky_access_across_trust_boundary.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+dos_risky_access_across_trust_boundary.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, dos_risky_access_across_trust_boundary.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(dos_risky_access_across_trust_boundary.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, dos_risky_access_across_trust_boundary.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(dos_risky_access_across_trust_boundary.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(dos_risky_access_across_trust_boundary.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(dos_risky_access_across_trust_boundary.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, dos_risky_access_across_trust_boundary.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(dos_risky_access_across_trust_boundary.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, dos_risky_access_across_trust_boundary.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(dos_risky_access_across_trust_boundary.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4272,32 +4284,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+incomplete_model.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+incomplete_model.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, incomplete_model.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(incomplete_model.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, incomplete_model.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(incomplete_model.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(incomplete_model.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(incomplete_model.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, incomplete_model.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(incomplete_model.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, incomplete_model.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(incomplete_model.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4306,32 +4318,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+ldap_injection.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+ldap_injection.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, ldap_injection.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(ldap_injection.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, ldap_injection.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(ldap_injection.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(ldap_injection.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(ldap_injection.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, ldap_injection.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(ldap_injection.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, ldap_injection.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(ldap_injection.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4340,32 +4352,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+missing_authentication.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+missing_authentication.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, missing_authentication.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(missing_authentication.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_authentication.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_authentication.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(missing_authentication.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(missing_authentication.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_authentication.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_authentication.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_authentication.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_authentication.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4374,32 +4386,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+missing_authentication_second_factor.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+missing_authentication_second_factor.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, missing_authentication_second_factor.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(missing_authentication_second_factor.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_authentication_second_factor.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_authentication_second_factor.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(missing_authentication_second_factor.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(missing_authentication_second_factor.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_authentication_second_factor.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_authentication_second_factor.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_authentication_second_factor.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_authentication_second_factor.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4408,32 +4420,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+missing_build_infrastructure.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+missing_build_infrastructure.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, missing_build_infrastructure.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(missing_build_infrastructure.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_build_infrastructure.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_build_infrastructure.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(missing_build_infrastructure.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(missing_build_infrastructure.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_build_infrastructure.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_build_infrastructure.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_build_infrastructure.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_build_infrastructure.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4442,32 +4454,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+missing_cloud_hardening.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+missing_cloud_hardening.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, missing_cloud_hardening.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(missing_cloud_hardening.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_cloud_hardening.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_cloud_hardening.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(missing_cloud_hardening.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(missing_cloud_hardening.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_cloud_hardening.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_cloud_hardening.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_cloud_hardening.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_cloud_hardening.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4476,36 +4488,36 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+missing_file_validation.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+missing_file_validation.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, missing_file_validation.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(missing_file_validation.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_file_validation.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_file_validation.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(missing_file_validation.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(missing_file_validation.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_file_validation.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_file_validation.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_file_validation.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_file_validation.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
-	if model.Contains(skippedRules, missing_hardening.Category().Id) {
+	if model.Contains(skippedRules, uni(missing_hardening.Category().Id)) {
 		skipped = "SKIPPED - "
 	} else {
 		skipped = ""
@@ -4513,63 +4525,63 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	pdf.CellFormat(190, 3, skipped+missing_hardening.Category().Title, "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, missing_hardening.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(missing_hardening.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_hardening.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_hardening.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(missing_hardening.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(missing_hardening.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_hardening.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_hardening.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_hardening.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_hardening.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
-	if model.Contains(skippedRules, missing_identity_propagation.Category().Id) {
+	if model.Contains(skippedRules, uni(missing_identity_propagation.Category().Id)) {
 		skipped = "SKIPPED - "
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+missing_identity_propagation.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+missing_identity_propagation.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, missing_identity_propagation.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(missing_identity_propagation.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_identity_propagation.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_identity_propagation.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(missing_identity_propagation.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(missing_identity_propagation.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_identity_propagation.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_identity_propagation.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_identity_propagation.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_identity_propagation.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4578,32 +4590,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+missing_identity_provider_isolation.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+missing_identity_provider_isolation.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, missing_identity_provider_isolation.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(missing_identity_provider_isolation.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_identity_provider_isolation.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_identity_provider_isolation.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(missing_identity_provider_isolation.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(missing_identity_provider_isolation.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_identity_provider_isolation.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_identity_provider_isolation.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_identity_provider_isolation.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_identity_provider_isolation.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4612,32 +4624,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+missing_identity_store.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+missing_identity_store.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, missing_identity_store.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(missing_identity_store.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_identity_store.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_identity_store.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(missing_identity_store.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(missing_identity_store.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_identity_store.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_identity_store.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_identity_store.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_identity_store.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4646,32 +4658,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+missing_network_segmentation.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+missing_network_segmentation.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, missing_network_segmentation.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(missing_network_segmentation.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_network_segmentation.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_network_segmentation.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(missing_network_segmentation.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(missing_network_segmentation.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_network_segmentation.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_network_segmentation.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_network_segmentation.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_network_segmentation.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4680,32 +4692,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+missing_vault.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+missing_vault.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, missing_vault.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(missing_vault.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_vault.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_vault.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(missing_vault.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(missing_vault.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_vault.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_vault.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_vault.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_vault.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4714,32 +4726,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+missing_vault_isolation.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+missing_vault_isolation.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, missing_vault_isolation.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(missing_vault_isolation.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_vault_isolation.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_vault_isolation.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(missing_vault_isolation.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(missing_vault_isolation.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_vault_isolation.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_vault_isolation.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_vault_isolation.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_vault_isolation.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4748,32 +4760,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+missing_waf.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+missing_waf.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, missing_waf.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(missing_waf.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_waf.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_waf.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(missing_waf.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(missing_waf.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_waf.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_waf.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, missing_waf.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(missing_waf.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4782,32 +4794,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+mixed_targets_on_shared_runtime.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+mixed_targets_on_shared_runtime.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, mixed_targets_on_shared_runtime.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(mixed_targets_on_shared_runtime.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, mixed_targets_on_shared_runtime.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(mixed_targets_on_shared_runtime.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(mixed_targets_on_shared_runtime.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(mixed_targets_on_shared_runtime.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, mixed_targets_on_shared_runtime.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(mixed_targets_on_shared_runtime.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, mixed_targets_on_shared_runtime.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(mixed_targets_on_shared_runtime.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4816,32 +4828,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+path_traversal.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+path_traversal.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, path_traversal.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(path_traversal.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, path_traversal.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(path_traversal.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(path_traversal.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(path_traversal.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, path_traversal.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(path_traversal.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, path_traversal.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(path_traversal.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4850,32 +4862,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+push_instead_of_pull_deployment.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+push_instead_of_pull_deployment.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, push_instead_of_pull_deployment.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(push_instead_of_pull_deployment.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, push_instead_of_pull_deployment.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(push_instead_of_pull_deployment.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(push_instead_of_pull_deployment.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(push_instead_of_pull_deployment.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, push_instead_of_pull_deployment.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(push_instead_of_pull_deployment.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, push_instead_of_pull_deployment.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(push_instead_of_pull_deployment.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4884,32 +4896,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+search_query_injection.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+search_query_injection.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, search_query_injection.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(search_query_injection.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, search_query_injection.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(search_query_injection.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(search_query_injection.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(search_query_injection.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, search_query_injection.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(search_query_injection.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, search_query_injection.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(search_query_injection.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4918,32 +4930,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+server_side_request_forgery.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+server_side_request_forgery.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, server_side_request_forgery.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(server_side_request_forgery.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, server_side_request_forgery.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(server_side_request_forgery.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(server_side_request_forgery.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(server_side_request_forgery.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, server_side_request_forgery.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(server_side_request_forgery.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, server_side_request_forgery.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(server_side_request_forgery.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4952,32 +4964,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+service_registry_poisoning.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+service_registry_poisoning.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, service_registry_poisoning.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(service_registry_poisoning.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, service_registry_poisoning.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(service_registry_poisoning.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(service_registry_poisoning.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(service_registry_poisoning.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, service_registry_poisoning.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(service_registry_poisoning.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, service_registry_poisoning.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(service_registry_poisoning.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -4986,32 +4998,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+sql_nosql_injection.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+sql_nosql_injection.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, sql_nosql_injection.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(sql_nosql_injection.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, sql_nosql_injection.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(sql_nosql_injection.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(sql_nosql_injection.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(sql_nosql_injection.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, sql_nosql_injection.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(sql_nosql_injection.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, sql_nosql_injection.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(sql_nosql_injection.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -5020,32 +5032,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+unchecked_deployment.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+unchecked_deployment.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, unchecked_deployment.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(unchecked_deployment.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unchecked_deployment.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unchecked_deployment.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(unchecked_deployment.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(unchecked_deployment.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unchecked_deployment.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unchecked_deployment.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unchecked_deployment.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unchecked_deployment.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -5054,32 +5066,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+unencrypted_asset.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+unencrypted_asset.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, unencrypted_asset.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(unencrypted_asset.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unencrypted_asset.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unencrypted_asset.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(unencrypted_asset.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(unencrypted_asset.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unencrypted_asset.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unencrypted_asset.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unencrypted_asset.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unencrypted_asset.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -5088,32 +5100,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+unencrypted_communication.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+unencrypted_communication.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, unencrypted_communication.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(unencrypted_communication.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unencrypted_communication.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unencrypted_communication.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(unencrypted_communication.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(unencrypted_communication.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unencrypted_communication.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unencrypted_communication.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unencrypted_communication.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unencrypted_communication.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -5122,32 +5134,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+unguarded_access_from_internet.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+unguarded_access_from_internet.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, unguarded_access_from_internet.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(unguarded_access_from_internet.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unguarded_access_from_internet.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unguarded_access_from_internet.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(unguarded_access_from_internet.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(unguarded_access_from_internet.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unguarded_access_from_internet.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unguarded_access_from_internet.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unguarded_access_from_internet.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unguarded_access_from_internet.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -5156,32 +5168,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+unguarded_direct_datastore_access.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+unguarded_direct_datastore_access.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, unguarded_direct_datastore_access.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(unguarded_direct_datastore_access.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unguarded_direct_datastore_access.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unguarded_direct_datastore_access.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(unguarded_direct_datastore_access.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(unguarded_direct_datastore_access.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unguarded_direct_datastore_access.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unguarded_direct_datastore_access.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unguarded_direct_datastore_access.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unguarded_direct_datastore_access.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -5190,32 +5202,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+unnecessary_communication_link.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+unnecessary_communication_link.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, unnecessary_communication_link.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(unnecessary_communication_link.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unnecessary_communication_link.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unnecessary_communication_link.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(unnecessary_communication_link.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(unnecessary_communication_link.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unnecessary_communication_link.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unnecessary_communication_link.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unnecessary_communication_link.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unnecessary_communication_link.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -5224,32 +5236,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+unnecessary_data_asset.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+unnecessary_data_asset.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, unnecessary_data_asset.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(unnecessary_data_asset.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unnecessary_data_asset.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unnecessary_data_asset.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(unnecessary_data_asset.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(unnecessary_data_asset.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unnecessary_data_asset.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unnecessary_data_asset.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unnecessary_data_asset.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unnecessary_data_asset.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -5258,32 +5270,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+unnecessary_data_transfer.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+unnecessary_data_transfer.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, unnecessary_data_transfer.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(unnecessary_data_transfer.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unnecessary_data_transfer.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unnecessary_data_transfer.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(unnecessary_data_transfer.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(unnecessary_data_transfer.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unnecessary_data_transfer.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unnecessary_data_transfer.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unnecessary_data_transfer.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unnecessary_data_transfer.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -5292,32 +5304,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+unnecessary_technical_asset.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+unnecessary_technical_asset.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, unnecessary_technical_asset.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(unnecessary_technical_asset.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unnecessary_technical_asset.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unnecessary_technical_asset.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(unnecessary_technical_asset.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(unnecessary_technical_asset.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unnecessary_technical_asset.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unnecessary_technical_asset.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, unnecessary_technical_asset.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(unnecessary_technical_asset.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -5326,32 +5338,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+untrusted_deserialization.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+untrusted_deserialization.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, untrusted_deserialization.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(untrusted_deserialization.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, untrusted_deserialization.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(untrusted_deserialization.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(untrusted_deserialization.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(untrusted_deserialization.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, untrusted_deserialization.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(untrusted_deserialization.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, untrusted_deserialization.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(untrusted_deserialization.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -5360,32 +5372,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+wrong_communication_link_content.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+wrong_communication_link_content.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, wrong_communication_link_content.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(wrong_communication_link_content.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, wrong_communication_link_content.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(wrong_communication_link_content.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(wrong_communication_link_content.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(wrong_communication_link_content.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, wrong_communication_link_content.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(wrong_communication_link_content.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, wrong_communication_link_content.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(wrong_communication_link_content.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -5394,32 +5406,32 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+wrong_trust_boundary_content.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+wrong_trust_boundary_content.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, wrong_trust_boundary_content.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(wrong_trust_boundary_content.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, wrong_trust_boundary_content.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(wrong_trust_boundary_content.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(wrong_trust_boundary_content.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(wrong_trust_boundary_content.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, wrong_trust_boundary_content.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(wrong_trust_boundary_content.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, wrong_trust_boundary_content.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(wrong_trust_boundary_content.Category().RiskAssessment), "0", "0", false)
 
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "B", fontSizeBody)
@@ -5428,38 +5440,38 @@ func createRiskRulesChecked(modelFilename string, skipRiskRules string, buildTim
 	} else {
 		skipped = ""
 	}
-	pdf.CellFormat(190, 3, skipped+xml_external_entity.Category().Title, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 3, uni(skipped+xml_external_entity.Category().Title), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeSmall)
-	pdf.CellFormat(190, 6, xml_external_entity.Category().Id, "0", 0, "", false, 0, "")
+	pdf.CellFormat(190, 6, uni(xml_external_entity.Category().Id), "0", 0, "", false, 0, "")
 	pdf.Ln(-1)
 	pdf.SetFont("Helvetica", "", fontSizeBody)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "STRIDE:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, xml_external_entity.Category().STRIDE.Title(), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(xml_external_entity.Category().STRIDE.Title()), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Description:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, firstParagraph(xml_external_entity.Category().Description), "0", "0", false)
+	pdf.MultiCell(160, 6, uni(firstParagraph(xml_external_entity.Category().Description)), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Detection:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, xml_external_entity.Category().DetectionLogic, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(xml_external_entity.Category().DetectionLogic), "0", "0", false)
 	pdfColorGray()
 	pdf.CellFormat(5, 6, "", "0", 0, "", false, 0, "")
 	pdf.CellFormat(25, 6, "Rating:", "0", 0, "", false, 0, "")
 	pdfColorBlack()
-	pdf.MultiCell(160, 6, xml_external_entity.Category().RiskAssessment, "0", "0", false)
+	pdf.MultiCell(160, 6, uni(xml_external_entity.Category().RiskAssessment), "0", "0", false)
 }
 
 func createTargetDescription(baseFolder string) {
 	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	pdf.SetTextColor(0, 0, 0)
-	title := "Application Overview"
+	title := uni("Application Overview")
 	addHeadline(title, false)
 	defineLinkTarget("{target-overview}")
 	currentChapterTitleBreadcrumb = title
@@ -5467,8 +5479,8 @@ func createTargetDescription(baseFolder string) {
 	var intro strings.Builder
 	html := pdf.HTMLBasicNew()
 
-	intro.WriteString("<b>Business Criticality</b><br><br>")
-	intro.WriteString("The overall business criticality of \"" + uni(model.ParsedModelRoot.Title) + "\" was rated as:<br><br>")
+	intro.WriteString(uni("<b>Business Criticality</b><br><br>"))
+	intro.WriteString(uni("The overall business criticality of \"" + uni(model.ParsedModelRoot.Title) + "\" was rated as:<br><br>"))
 	html.Write(5, intro.String())
 	criticality := model.ParsedModelRoot.BusinessCriticality
 	intro.Reset()
@@ -5592,8 +5604,9 @@ func fileExists(filename string) bool {
 }
 
 func getHeightWhenWidthIsFix(imageFullFilename string, width float64) float64 {
+	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	if !fileExists(imageFullFilename) {
-		panic(errors.New("Image file does not exist (or is not readable as file): " + filepath.Base(imageFullFilename)))
+		panic(errors.New(uni("O arquivo de imagem não existe (ou não pode ser lido como arquivo): " + filepath.Base(imageFullFilename))))
 	}
 	/* #nosec imageFullFilename is not tainted (see caller restricting it to image files of model folder only) */
 	file, err := os.Open(imageFullFilename)
@@ -5605,6 +5618,7 @@ func getHeightWhenWidthIsFix(imageFullFilename string, width float64) float64 {
 }
 
 func embedDataFlowDiagram(diagramFilenamePNG string) {
+	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	pdf.SetTextColor(0, 0, 0)
 	title := "Data-Flow Diagram"
 	addHeadline(title, false)
@@ -5612,10 +5626,10 @@ func embedDataFlowDiagram(diagramFilenamePNG string) {
 	currentChapterTitleBreadcrumb = title
 
 	var intro strings.Builder
-	intro.WriteString("The following diagram was generated by Threagile based on the model input and gives a high-level " +
-		"overview of the data-flow between technical assets. " +
-		"The RAA value is the calculated <i>Relative Attacker Attractiveness</i> in percent. " +
-		"For a full high-resolution version of this diagram please refer to the PNG image file alongside this report.")
+	intro.WriteString(uni("O diagrama a seguir foi gerado por Threagile com base na entrada do modelo e fornece um alto nível " +
+		"visão geral do fluxo de dados entre ativos técnicos. " +
+		"O valor de RAA é a <i>Atratividade relativa do atacante</i> calculada em porcentagem. " +
+		"Para uma versão completa de alta resolução deste diagrama, consulte o arquivo de imagem PNG ao lado deste relatório."))
 
 	html := pdf.HTMLBasicNew()
 	html.Write(5, intro.String())
@@ -5692,19 +5706,20 @@ func embedDataFlowDiagram(diagramFilenamePNG string) {
 }
 
 func embedDataRiskMapping(diagramFilenamePNG string) {
+	uni := pdf.UnicodeTranslatorFromDescriptor("")
 	pdf.SetTextColor(0, 0, 0)
-	title := "Data Mapping"
+	title := uni("Data Mapping")
 	addHeadline(title, false)
 	defineLinkTarget("{data-risk-mapping}")
 	currentChapterTitleBreadcrumb = title
 
 	var intro strings.Builder
-	intro.WriteString("The following diagram was generated by Threagile based on the model input and gives a high-level " +
-		"distribution of data assets across technical assets. The color matches the identified data breach probability and risk level " +
-		"(see the \"Data Breach Probabilities\" chapter for more details). " +
-		"A solid line stands for <i>data is stored by the asset</i> and a dashed one means " +
-		"<i>data is processed by the asset</i>. For a full high-resolution version of this diagram please refer to the PNG image " +
-		"file alongside this report.")
+	intro.WriteString(uni("O diagrama a seguir foi gerado por Threagile com base na entrada do modelo e fornece um alto nível " +
+		"distribuição de ativos de dados entre ativos técnicos. A cor corresponde à probabilidade de violação de dados identificados e ao nível de risco " +
+		"(Veja o \"Probabilidades de violação de dados \" capítulo para mais detalhes). " +
+		"Uma linha sólida significa <i>os dados são armazenados pelo</i> e um tracejado significa " +
+		"<i>os dados são processados pelo ativo</i>. Para uma versão completa de alta resolução deste diagrama, consulte a imagem PNG " +
+		"arquivo junto com este relatório."))
 
 	html := pdf.HTMLBasicNew()
 	html.Write(5, intro.String())

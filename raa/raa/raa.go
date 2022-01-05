@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/threagile/threagile/model"
 	"sort"
+
+	"github.com/threagile/threagile/model"
 )
 
 // used from plugin caller:
@@ -14,13 +15,14 @@ func CalculateRAA() string {
 		model.ParsedModelRoot.TechnicalAssets[techAssetID] = techAsset
 	}
 	// return intro text (for reporting etc., can be short summary-like)
-	return "For each technical asset the <b>\"Relative Attacker Attractiveness\"</b> (RAA) value was calculated " +
-		"in percent. The higher the RAA, the more interesting it is for an attacker to compromise the asset. The calculation algorithm takes " +
-		"the sensitivity ratings and quantities of stored and processed data into account as well as the communication links of the " +
-		"technical asset. Neighbouring assets to high-value RAA targets might receive an increase in their RAA value when they have " +
-		"a communication link towards that target (\"Pivoting-Factor\").<br><br>The following lists all technical assets sorted by their " +
-		"RAA value from highest (most attacker attractive) to lowest. This list can be used to prioritize on efforts relevant for the most " +
-		"attacker-attractive technical assets:"
+	return "Para cada ativo técnico, o valor <b>\"Atratividade relativa do atacante \" </b> (RAA) foi calculado " +
+		"em porcentagem. Quanto maior o RAA, mais interessante é para um invasor comprometer o ativo. O algoritmo de cálculo leva" +
+		"as classificações de sensibilidade e as quantidades de dados armazenados e processados ​​em consideração, bem como os links de comunicação do" +
+		"ativo técnico. Ativos vizinhos a alvos RAA de alto valor podem receber um aumento em seu valor RAA quando tiverem" +
+		"um link de comunicação para esse alvo (\" Pivoting-Factor\"). <br> <br> O seguinte lista todos os ativos técnicos classificados por seus" +
+		"Valor de RAA do mais alto (mais atraente para o atacante) ao mais baixo. Esta lista pode ser usada para priorizar os esforços relevantes para a maioria" +
+		"recursos técnicos atraentes para o invasor:"
+
 }
 
 var attackerAttractivenessMinimum, attackerAttractivenessMaximum, spread float64 = 0, 0, 0

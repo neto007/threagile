@@ -8,23 +8,23 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "accidental-secret-leak",
 		Title: "Accidental Secret Leak",
-		Description: "Sourcecode repositories (including their histories) as well as artifact registries can accidentally contain secrets like " +
-			"checked-in or packaged-in passwords, API tokens, certificates, crypto keys, etc.",
-		Impact: "If this risk is unmitigated, attackers which have access to affected sourcecode repositories or artifact registries might " +
-			"find secrets accidentally checked-in.",
+		Description: "Repositórios de código fonte (incluindo seus históricos), bem como registros de artefatos podem acidentalmente conter segredos como " +
+			"senhas registradas ou empacotadas, tokens de API, certificados, chaves criptográficas, etc.",
+		Impact: "Se este risco não for mitigado, os invasores que têm acesso aos repositórios de código-fonte afetados ou registros de artefatos podem " +
+			"encontrar segredos com check-in acidental.",
 		ASVS:       "V14 - Configuration Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
 		Action:     "Build Pipeline Hardening",
-		Mitigation: "Establish measures preventing accidental check-in or package-in of secrets into sourcecode repositories " +
-			"and artifact registries. This starts by using good .gitignore and .dockerignore files, but does not stop there. " +
-			"See for example tools like <i>\"git-secrets\" or \"Talisman\"</i> to have check-in preventive measures for secrets. " +
-			"Consider also to regularly scan your repositories for secrets accidentally checked-in using scanning tools like <i>\"gitleaks\" or \"gitrob\"</i>.",
-		Check:                      "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation: "Estabeleça medidas de prevenção de check-in acidental ou pacote de segredos em repositórios de código-fonte " +
+			"e registros de artefatos. Isso começa usando bons arquivos .gitignore e .dockerignore, mas não para por aí. " +
+			"Veja, por exemplo, ferramentas como <i> \"git-secrets \" ou \"Talisman \" </i> para ter medidas preventivas de verificação de segredos. " +
+			"Considere também verificar regularmente seus repositórios em busca de segredos registrados acidentalmente usando ferramentas de verificação como <i>\"gitleaks\" ou \"gitrob\" </i>.",
+		Check:                      "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function:                   model.Operations,
 		STRIDE:                     model.InformationDisclosure,
-		DetectionLogic:             "In-scope sourcecode repositories and artifact registries.",
-		RiskAssessment:             "The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed and stored.",
-		FalsePositives:             "Usually no false positives.",
+		DetectionLogic:             "Repositórios de código-fonte e registros de artefatos dentro do escopo",
+		RiskAssessment:             "A classificação de risco depende da sensibilidade do próprio ativo técnico e dos ativos de dados processados e armazenados.",
+		FalsePositives:             "Normalmente não há falsos positivos.",
 		ModelFailurePossibleReason: false,
 		CWE:                        200,
 	}

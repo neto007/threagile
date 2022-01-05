@@ -8,25 +8,25 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:          "cross-site-request-forgery",
 		Title:       "Cross-Site Request Forgery (CSRF)",
-		Description: "When a web application is accessed via web protocols Cross-Site Request Forgery (CSRF) risks might arise.",
-		Impact: "If this risk remains unmitigated, attackers might be able to trick logged-in victim users into unwanted actions within the web application " +
-			"by visiting an attacker controlled web site.",
+		Description: "Quando um aplicativo da web é acessado por meio de protocolos da web, podem surgir riscos de falsificação de solicitação de site cruzado (CSRF).",
+		Impact: "Se esse risco permanecer inalterado, os invasores podem enganar os usuários vítimas conectados a ações indesejadas dentro do aplicativo da web " +
+			"visitando um site controlado pelo invasor.",
 		ASVS:       "V4 - Access Control Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
 		Action:     "CSRF Prevention",
-		Mitigation: "Try to use anti-CSRF tokens ot the double-submit patterns (at least for logged-in requests). " +
-			"When your authentication scheme depends on cookies (like session or token cookies), consider marking them with " +
-			"the same-site flag. " +
-			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation: "Tente usar tokens anti-CSRF dos padrões de envio duplo (pelo menos para solicitações conectadas). " +
+			"Quando o seu esquema de autenticação depende de cookies (como cookies de sessão ou token), considere marcá-los com " +
+			"o same-site flag. " +
+			"Quando um produto de terceiros é usado em vez de um software desenvolvido sob medida, verifique se o produto aplica a atenuação adequada e garanta um nível de patch razoável.",
+		Check:          "As recomendações da folha de dicas vinculada e do capítulo ASVS referenciado são aplicadas?",
 		Function:       model.Development,
 		STRIDE:         model.Spoofing,
-		DetectionLogic: "In-scope web applications accessed via typical web access protocols.",
-		RiskAssessment: "The risk rating depends on the integrity rating of the data sent across the communication link.",
-		FalsePositives: "Web applications passing the authentication sate via custom headers instead of cookies can " +
-			"eventually be false positives. Also when the web application " +
-			"is not accessed via a browser-like component (i.e not by a human user initiating the request that " +
-			"gets passed through all components until it reaches the web application) this can be considered a false positive.",
+		DetectionLogic: "Aplicativos da web dentro do escopo acessados por meio de protocolos de acesso à web típicos.",
+		RiskAssessment: "A classificação de risco depende da classificação de integridade dos dados enviados pelo link de comunicação.",
+		FalsePositives: "Os aplicativos da Web que passam pelo estado de autenticação por meio de cabeçalhos personalizados em vez de cookies podem " +
+			"eventualmente, ser falsos positivos. Também quando o aplicativo da web " +
+			"não é acessado por meio de um componente semelhante ao navegador (ou seja, não por um usuário humano iniciando a solicitação que " +
+			"passa por todos os componentes até atingir o aplicativo da web), isso pode ser considerado um falso positivo.",
 		ModelFailurePossibleReason: false,
 		CWE:                        352,
 	}

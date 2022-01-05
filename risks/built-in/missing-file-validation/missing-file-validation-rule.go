@@ -8,23 +8,23 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:          "missing-file-validation",
 		Title:       "Missing File Validation",
-		Description: "When a technical asset accepts files, these input files should be strictly validated about filename and type.",
-		Impact:      "If this risk is unmitigated, attackers might be able to provide malicious files to the application.",
+		Description: "Quando um ativo técnico aceita arquivos, esses arquivos de entrada devem ser validados estritamente quanto ao nome do arquivo e tipo.",
+		Impact:      "Se esse risco não for mitigado, os invasores podem fornecer arquivos maliciosos ao aplicativo.",
 		ASVS:        "V12 - File and Resources Verification Requirements",
 		CheatSheet:  "https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html",
 		Action:      "File Validation",
-		Mitigation: "Filter by file extension and discard (if feasible) the name provided. Whitelist the accepted file types " +
-			"and determine the mime-type on the server-side (for example via \"Apache Tika\" or similar checks). If the file is retrievable by " +
-			"endusers and/or backoffice employees, consider performing scans for popular malware (if the files can be retrieved much later than they " +
-			"were uploaded, also apply a fresh malware scan during retrieval to scan with newer signatures of popular malware). Also enforce " +
-			"limits on maximum file size to avoid denial-of-service like scenarios.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation: "Filtre por extensão de arquivo e descarte (se possível) o nome fornecido. Coloque na lista de permissões os tipos de arquivo aceitos " +
+			"e determine o tipo MIME no lado do servidor (por exemplo, via \"Apache Tika\"ou verificações semelhantes). Se o arquivo for recuperável por " +
+			"usuários finais e/ou funcionários de backoffice, considerem realizar varreduras de malware popular (se os arquivos puderem ser recuperados muito mais tarde do que eles " +
+			"foram carregados, aplique também uma nova varredura de malware durante a recuperação para fazer a varredura com assinaturas mais recentes de malware popular). Também aplique " +
+			"limites no tamanho máximo do arquivo para evitar cenários de negação de serviço.",
+		Check:          "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function:       model.Development,
 		STRIDE:         model.Spoofing,
-		DetectionLogic: "In-scope technical assets with custom-developed code accepting file data formats.",
-		RiskAssessment: "The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed and stored.",
-		FalsePositives: "Fully trusted (i.e. cryptographically signed or similar) files can be considered " +
-			"as false positives after individual review.",
+		DetectionLogic: "Ativos técnicos dentro do escopo com código desenvolvido sob medida que aceita formatos de dados de arquivo.",
+		RiskAssessment: "A classificação de risco depende da sensibilidade do próprio ativo técnico e dos ativos de dados processados e armazenados.",
+		FalsePositives: "Arquivos totalmente confiáveis (ou seja, assinados criptograficamente ou semelhantes) podem ser considerados " +
+			"como falsos positivos após revisão individual.",
 		ModelFailurePossibleReason: false,
 		CWE:                        434,
 	}

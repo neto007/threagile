@@ -8,24 +8,24 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "unencrypted-asset",
 		Title: "Unencrypted Technical Assets",
-		Description: "Due to the confidentiality rating of the technical asset itself and/or the processed data assets " +
-			"this technical asset must be encrypted. The risk rating depends on the sensitivity technical asset itself and of the data assets stored.",
-		Impact:     "If this risk is unmitigated, attackers might be able to access unencrypted data when successfully compromising sensitive components.",
+		Description: "Devido à classificação de confidencialidade do próprio ativo técnico e / ou os ativos de dados processados " +
+			"Este ativo técnico deve ser criptografado.A classificação de risco depende do próprio ativo técnico da sensibilidade e dos ativos de dados armazenados.",
+		Impact:     "Se este risco for ignorado, os invasores poderão acessar dados não criptografados quando comprometer com êxito componentes sensíveis.",
 		ASVS:       "V6 - Stored Cryptography Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html",
 		Action:     "Encryption of Technical Asset",
-		Mitigation: "Apply encryption to the technical asset.",
-		Check:      "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation: "Aplique criptografia ao ativo técnico.",
+		Check:      "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function:   model.Operations,
 		STRIDE:     model.InformationDisclosure,
-		DetectionLogic: "In-scope unencrypted technical assets (excluding " + model.ReverseProxy.String() +
+		DetectionLogic: "Ativos técnicos não criptografados no escopo (excluindo " + model.ReverseProxy.String() +
 			", " + model.LoadBalancer.String() + ", " + model.WAF.String() + ", " + model.IDS.String() +
-			", " + model.IPS.String() + " and embedded components like " + model.Library.String() + ") " +
-			"storing data assets rated at least as " + model.Confidential.String() + " or " + model.Critical.String() + ". " +
-			"For technical assets storing data assets rated as " + model.StrictlyConfidential.String() + " or " + model.MissionCritical.String() + " the " +
-			"encryption must be of type " + model.DataWithEnduserIndividualKey.String() + ".",
-		RiskAssessment:             "Depending on the confidentiality rating of the stored data-assets either medium or high risk.",
-		FalsePositives:             "When all sensitive data stored within the asset is already fully encrypted on document or data level.",
+			", " + model.IPS.String() + "e componentes incorporados como " + model.Library.String() + ") " +
+			"armazenar ativos de dados classificados pelo menos como " + model.Confidential.String() + " ou " + model.Critical.String() + ". " +
+			"Para ativos técnicos que armazenam ativos de dados classificados como " + model.StrictlyConfidential.String() + " ou " + model.MissionCritical.String() + " a " +
+			"criptografia deve ser do tipo " + model.DataWithEnduserIndividualKey.String() + ".",
+		RiskAssessment:             "Dependendo da classificação de confidencialidade dos ativos de dados armazenados ou de alto risco.",
+		FalsePositives:             "Quando todos os dados confidenciais armazenados dentro do ativo já estiver totalmente criptografado no documento ou no nível de dados.",
 		ModelFailurePossibleReason: false,
 		CWE:                        311,
 	}

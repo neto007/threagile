@@ -1,8 +1,9 @@
 package missing_network_segmentation
 
 import (
-	"github.com/threagile/threagile/model"
 	"sort"
+
+	"github.com/threagile/threagile/model"
 )
 
 const raaLimit = 50
@@ -11,27 +12,27 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "missing-network-segmentation",
 		Title: "Missing Network Segmentation",
-		Description: "Highly sensitive assets and/or datastores residing in the same network segment than other " +
-			"lower sensitive assets (like webservers or content management systems etc.) should be better protected " +
-			"by a network segmentation trust-boundary.",
-		Impact: "If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards " +
-			"more valuable targets, as they are not separated by network segmentation.",
+		Description: "Ativos altamente sensíveis e/ou armazenamentos de dados que residem no mesmo segmento de rede que outros " +
+			"ativos menos sensíveis (como servidores da web ou sistemas de gerenciamento de conteúdo, etc.) devem ser melhor protegidos " +
+			"por um limite de confiança de segmentação de rede.",
+		Impact: "Se este risco não for mitigado, os invasores que atacam com sucesso outros componentes do sistema podem ter um caminho fácil para " +
+			"alvos mais valiosos, uma vez que não são separados por segmentação de rede.",
 		ASVS:       "V1 - Architecture, Design and Threat Modeling Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
 		Action:     "Network Segmentation",
-		Mitigation: "Apply a network segmentation trust-boundary around the highly sensitive assets and/or datastores.",
-		Check:      "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation: "Aplique um limite de confiança de segmentação de rede em torno dos ativos e / ou armazenamentos de dados altamente confidenciais.",
+		Check:      "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function:   model.Operations,
 		STRIDE:     model.ElevationOfPrivilege,
-		DetectionLogic: "In-scope technical assets with high sensitivity and RAA values as well as datastores " +
-			"when surrounded by assets (without a network trust-boundary in-between) which are of type " + model.ClientSystem.String() + ", " +
+		DetectionLogic: "Ativos técnicos no escopo com alta sensibilidade e valores de RAA, bem como armazenamentos de dados " +
+			"quando cercado por ativos (without a network trust-boundary in-between) que são do tipo " + model.ClientSystem.String() + ", " +
 			model.WebServer.String() + ", " + model.WebApplication.String() + ", " + model.CMS.String() + ", " + model.WebServiceREST.String() + ", " + model.WebServiceSOAP.String() + ", " +
-			model.BuildPipeline.String() + ", " + model.SourcecodeRepository.String() + ", " + model.Monitoring.String() + ", or similar and there is no direct connection between these " +
-			"(hence no requirement to be so close to each other).",
-		RiskAssessment: "Default is " + model.LowSeverity.String() + " risk. The risk is increased to " + model.MediumSeverity.String() + " when the asset missing the " +
-			"trust-boundary protection is rated as " + model.StrictlyConfidential.String() + " or " + model.MissionCritical.String() + ".",
-		FalsePositives: "When all assets within the network segmentation trust-boundary are hardened and protected to the same extend as if all were " +
-			"containing/processing highly sensitive data.",
+			model.BuildPipeline.String() + ", " + model.SourcecodeRepository.String() + ", " + model.Monitoring.String() + ", ou semelhante e não há conexão direta entre estes " +
+			"(portanto, não há necessidade de estar tão perto um do outro).",
+		RiskAssessment: "O padrão é risco " + model.LowSeverity.String() + ". O risco aumenta para " + model.MediumSeverity.String() + " quando o ativo está faltando " +
+			"trust-boundary proteção é classificada como " + model.StrictlyConfidential.String() + " ou " + model.MissionCritical.String() + ".",
+		FalsePositives: "Quando todos os ativos dentro do limite de confiança da segmentação de rede são reforçados e protegidos da mesma forma como se todos fossem " +
+			"contendo/processando dados altamente confidenciais.",
 		ModelFailurePossibleReason: false,
 		CWE:                        1008,
 	}

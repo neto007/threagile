@@ -1,8 +1,9 @@
 package missing_hardening
 
 import (
-	"github.com/threagile/threagile/model"
 	"strconv"
+
+	"github.com/threagile/threagile/model"
 )
 
 const raaLimit = 55
@@ -12,21 +13,21 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "missing-hardening",
 		Title: "Missing Hardening",
-		Description: "Technical assets with a Relative Attacker Attractiveness (RAA) value of " + strconv.Itoa(raaLimit) + " % or higher should be " +
-			"explicitly hardened taking best practices and vendor hardening guides into account.",
-		Impact:     "If this risk remains unmitigated, attackers might be able to easier attack high-value targets.",
+		Description: "Recursos técnicos com um valor de Atração Relativa do Atacante (RAA) de " + strconv.Itoa(raaLimit) + " % or mais alto deveria ser " +
+			"explicitamente reforçado, levando em consideração as práticas recomendadas e os guias de proteção do fornecedor. ",
+		Impact:     "Se esse risco permanecer inalterado, os invasores poderão atacar mais facilmente alvos de alto valor. ",
 		ASVS:       "V14 - Configuration Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
 		Action:     "System Hardening",
-		Mitigation: "Try to apply all hardening best practices (like CIS benchmarks, OWASP recommendations, vendor " +
-			"recommendations, DevSec Hardening Framework, DBSAT for Oracle databases, and others).",
-		Check:    "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation: "Tente aplicar todas as melhores práticas de proteção (como benchmarks CIS, recomendações OWASP, fornecedor " +
+			"recomendações, DevSec Hardening Framework, DBSAT para bancos de dados Oracle e outros).",
+		Check:    "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function: model.Operations,
 		STRIDE:   model.Tampering,
-		DetectionLogic: "In-scope technical assets with RAA values of " + strconv.Itoa(raaLimit) + " % or higher. " +
-			"Generally for high-value targets like datastores, application servers, identity providers and ERP systems this limit is reduced to " + strconv.Itoa(raaLimitReduced) + " %",
-		RiskAssessment:             "The risk rating depends on the sensitivity of the data processed or stored in the technical asset.",
-		FalsePositives:             "Usually no false positives.",
+		DetectionLogic: "Ativos técnicos no escopo com valores de RAA de " + strconv.Itoa(raaLimit) + " % or mais alto. " +
+			"Geralmente, para destinos de alto valor, como armazenamentos de dados, servidores de aplicativos, provedores de identidade e sistemas ERP, esse limite é reduzido para " + strconv.Itoa(raaLimitReduced) + " %",
+		RiskAssessment:             "A classificação de risco depende da sensibilidade dos dados processados ou armazenados no ativo técnico.",
+		FalsePositives:             "Normalmente não há falsos positivos.",
 		ModelFailurePossibleReason: false,
 		CWE:                        16,
 	}

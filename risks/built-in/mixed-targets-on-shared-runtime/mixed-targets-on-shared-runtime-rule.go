@@ -1,33 +1,34 @@
 package mixed_targets_on_shared_runtime
 
 import (
-	"github.com/threagile/threagile/model"
 	"sort"
+
+	"github.com/threagile/threagile/model"
 )
 
 func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "mixed-targets-on-shared-runtime",
 		Title: "Mixed Targets on Shared Runtime",
-		Description: "Different attacker targets (like frontend and backend/datastore components) should not be running on the same " +
-			"shared (underlying) runtime.",
-		Impact: "If this risk is unmitigated, attackers successfully attacking other components of the system might have an easy path towards " +
-			"more valuable targets, as they are running on the same shared runtime.",
+		Description: "Alvos diferentes de invasores (como componentes de front-end e back-end / armazenamento de dados) não devem ser executados no mesmo " +
+			"tempo de execução compartilhado (subjacente).",
+		Impact: "Se este risco não for mitigado, os invasores que atacam com sucesso outros componentes do sistema podem ter um caminho fácil para " +
+			"alvos mais valiosos, pois estão em execução no mesmo tempo de execução compartilhado.",
 		ASVS:       "V1 - Architecture, Design and Threat Modeling Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
 		Action:     "Runtime Separation",
-		Mitigation: "Use separate runtime environments for running different target components or apply similar separation styles to " +
-			"prevent load- or breach-related problems originating from one more attacker-facing asset impacts also the " +
-			"other more critical rated backend/datastore assets.",
-		Check:    "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation: "Use ambientes de tempo de execução separados para executar diferentes componentes de destino ou aplique estilos de separação semelhantes para " +
+			"evitar problemas relacionados à carga ou violação originados de mais um ativo que enfrenta o invasor e também impacta o " +
+			"outros ativos de back-end / armazenamento de dados com classificação mais crítica.",
+		Check:    "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function: model.Operations,
 		STRIDE:   model.ElevationOfPrivilege,
-		DetectionLogic: "Shared runtime running technical assets of different trust-boundaries is at risk. " +
-			"Also mixing backend/datastore with frontend components on the same shared runtime is considered a risk.",
-		RiskAssessment: "The risk rating (low or medium) depends on the confidentiality, integrity, and availability rating of " +
-			"the technical asset running on the shared runtime.",
-		FalsePositives: "When all assets running on the shared runtime are hardened and protected to the same extend as if all were " +
-			"containing/processing highly sensitive data.",
+		DetectionLogic: "O tempo de execução compartilhado executando ativos técnicos de diferentes limites de confiança está em risco. " +
+			"Além disso, misturar back-end / armazenamento de dados com componentes de front-end no mesmo tempo de execução compartilhado é considerado um risco.",
+		RiskAssessment: "A classificação de risco (baixo ou médio) depende da classificação de confidencialidade, integridade e disponibilidade de " +
+			"o ativo técnico em execução no tempo de execução compartilhado.",
+		FalsePositives: "Quando todos os ativos em execução no tempo de execução compartilhado são reforçados e protegidos da mesma forma como se todos fossem " +
+			"contendo/processando dados altamente confidenciais.",
 		ModelFailurePossibleReason: false,
 		CWE:                        1008,
 	}

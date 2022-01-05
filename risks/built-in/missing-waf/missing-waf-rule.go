@@ -8,22 +8,22 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "missing-waf",
 		Title: "Missing Web Application Firewall (WAF)",
-		Description: "To have a first line of filtering defense, security architectures with web-services or web-applications should include a WAF in front of them. " +
-			"Even though a WAF is not a replacement for security (all components must be secure even without a WAF) it adds another layer of defense to the overall " +
-			"system by delaying some attacks and having easier attack alerting through it.",
-		Impact:     "If this risk is unmitigated, attackers might be able to apply standard attack pattern tests at great speed without any filtering.",
+		Description: "Para ter uma primeira linha de defesa de filtragem, as arquiteturas de segurança com serviços da Web ou aplicativos da Web devem incluir um WAF na frente deles. " +
+			"Mesmo que um WAF não seja um substituto para a segurança (todos os componentes devem ser seguros, mesmo sem um WAF), ele adiciona outra camada de defesa ao geral " +
+			"sistema atrasando alguns ataques e tendo um alerta de ataque mais fácil através dele.",
+		Impact:     "Se esse risco não for mitigado, os invasores poderão aplicar testes de padrão de ataque padrão em grande velocidade, sem qualquer filtragem.",
 		ASVS:       "V1 - Architecture, Design and Threat Modeling Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Virtual_Patching_Cheat_Sheet.html",
 		Action:     "Web Application Firewall (WAF)",
-		Mitigation: "Consider placing a Web Application Firewall (WAF) in front of the web-services and/or web-applications. For cloud environments many cloud providers offer " +
-			"pre-configured WAFs. Even reverse proxies can be enhances by a WAF component via ModSecurity plugins.",
-		Check:          "Is a Web Application Firewall (WAF) in place?",
+		Mitigation: "Considere colocar um Web Application Firewall (WAF) na frente dos serviços da web e / ou aplicativos da web. Para ambientes de nuvem, muitos provedores de nuvem oferecem " +
+			"WAFs pré-configurados. Até mesmo proxies reversos podem ser aprimorados por um componente WAF por meio de plug-ins ModSecurity.",
+		Check:          "Existe um Firewall de aplicativo da Web (WAF)?",
 		Function:       model.Operations,
 		STRIDE:         model.Tampering,
-		DetectionLogic: "In-scope web-services and/or web-applications accessed across a network trust boundary not having a Web Application Firewall (WAF) in front of them.",
-		RiskAssessment: "The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed and stored.",
-		FalsePositives: "Targets only accessible via WAFs or reverse proxies containing a WAF component (like ModSecurity) can be considered " +
-			"as false positives after individual review.",
+		DetectionLogic: "Serviços da Web e / ou aplicativos da Web dentro do escopo acessados através de um limite de confiança da rede sem um Firewall de aplicativo da Web (WAF) na frente deles.",
+		RiskAssessment: "A classificação de risco depende da sensibilidade do próprio ativo técnico e dos ativos de dados processados e armazenados.",
+		FalsePositives: "Os destinos acessíveis apenas por WAFs ou proxies reversos contendo um componente WAF (como ModSecurity) podem ser considerados " +
+			"como falsos positivos após revisão individual.",
 		ModelFailurePossibleReason: false,
 		CWE:                        1008,
 	}

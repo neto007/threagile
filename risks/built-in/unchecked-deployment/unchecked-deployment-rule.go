@@ -8,24 +8,24 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "unchecked-deployment",
 		Title: "Unchecked Deployment",
-		Description: "For each build-pipeline component Unchecked Deployment risks might arise when the build-pipeline " +
-			"does not include established DevSecOps best-practices. DevSecOps best-practices scan as part of CI/CD pipelines for " +
-			"vulnerabilities in source- or byte-code, dependencies, container layers, and dynamically against running test systems. " +
-			"There are several open-source and commercial tools existing in the categories DAST, SAST, and IAST.",
-		Impact: "If this risk remains unmitigated, vulnerabilities in custom-developed software or their dependencies " +
-			"might not be identified during continuous deployment cycles.",
+		Description: "Para cada componente do pipeline de construção, riscos de implantação não verificados podem surgir quando o pipeline de construção " +
+			"não inclui práticas recomendadas DevSecOps estabelecidas. Varredura de práticas recomendadas de DevSecOps como parte de pipelines de CI / CD para " +
+			"vulnerabilidades em código-fonte ou código de bytes, dependências, camadas de contêiner e dinamicamente em relação a sistemas de teste em execução. " +
+			"Existem várias ferramentas de código aberto e comerciais nas categorias DAST, SAST e IAST.",
+		Impact: "Se este risco permanecer inalterado, vulnerabilidades em software desenvolvido sob medida ou em suas dependências " +
+			"pode não ser identificado durante os ciclos de implantação contínua.",
 		ASVS:       "V14 - Configuration Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Vulnerable_Dependency_Management_Cheat_Sheet.html",
 		Action:     "Build Pipeline Hardening",
-		Mitigation: "Apply DevSecOps best-practices and use scanning tools to identify vulnerabilities in source- or byte-code," +
-			"dependencies, container layers, and optionally also via dynamic scans against running test systems.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation: "Aplicar as melhores práticas DevSecOps e usar ferramentas de varredura para identificar vulnerabilidades no código-fonte ou byte," +
+			"dependências, camadas de contêiner e, opcionalmente, também por meio de varreduras dinâmicas em sistemas de teste em execução.",
+		Check:          "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function:       model.Architecture,
 		STRIDE:         model.Tampering,
-		DetectionLogic: "All development-relevant technical assets.",
-		RiskAssessment: "The risk rating depends on the highest rating of the technical assets and data assets processed by deployment-receiving targets.",
-		FalsePositives: "When the build-pipeline does not build any software components it can be considered a false positive " +
-			"after individual review.",
+		DetectionLogic: "Todos os ativos técnicos relevantes para o desenvolvimento.",
+		RiskAssessment: "A classificação de risco depende da classificação mais alta dos ativos técnicos e ativos de dados processados por alvos de recebimento de implantação.",
+		FalsePositives: "Quando o pipeline de construção não cria nenhum componente de software, pode ser considerado um falso positivo " +
+			"após revisão individual.",
 		ModelFailurePossibleReason: false,
 		CWE:                        1127,
 	}

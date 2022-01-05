@@ -8,23 +8,23 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "cross-site-scripting",
 		Title: "Cross-Site Scripting (XSS)",
-		Description: "For each web application Cross-Site Scripting (XSS) risks might arise. In terms " +
-			"of the overall risk level take other applications running on the same domain into account as well.",
-		Impact:     "If this risk remains unmitigated, attackers might be able to access individual victim sessions and steal or modify user data.",
+		Description: "Para cada aplicativo da web, podem surgir riscos de Cross-Site Scripting (XSS). Em termos " +
+			"do nível de risco geral, leve em consideração outros aplicativos em execução no mesmo domínio.",
+		Impact:     "Se esse risco permanecer inalterado, os invasores podem acessar as sessões individuais das vítimas e roubar ou modificar os dados do usuário.",
 		ASVS:       "V5 - Validation, Sanitization and Encoding Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html",
 		Action:     "XSS Prevention",
-		Mitigation: "Try to encode all values sent back to the browser and also handle DOM-manipulations in a safe way " +
-			"to avoid DOM-based XSS. " +
-			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation: "Tente codificar todos os valores enviados de volta ao navegador e também lidar com manipulações de DOM de maneira segura " +
+			"para evitar XSS baseado em DOM. " +
+			"Quando um produto de terceiros é usado em vez de um software desenvolvido sob medida, verifique se o produto aplica a atenuação adequada e garanta um nível de patch razoável.",
+		Check:          "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function:       model.Development,
 		STRIDE:         model.Tampering,
 		DetectionLogic: "In-scope web applications.",
-		RiskAssessment: "The risk rating depends on the sensitivity of the data processed or stored in the web application.",
-		FalsePositives: "When the technical asset " +
-			"is not accessed via a browser-like component (i.e not by a human user initiating the request that " +
-			"gets passed through all components until it reaches the web application) this can be considered a false positive.",
+		RiskAssessment: "A classificação de risco depende da sensibilidade dos dados processados ou armazenados no aplicativo da web.",
+		FalsePositives: "Quando o ativo técnico " +
+			"não é acessado por meio de um componente semelhante ao navegador (ou seja, não por um usuário humano iniciando a solicitação que " +
+			"passa por todos os componentes até atingir o aplicativo da web), isso pode ser considerado um falso positivo.",
 		ModelFailurePossibleReason: false,
 		CWE:                        79,
 	}

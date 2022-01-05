@@ -8,24 +8,24 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "path-traversal",
 		Title: "Path-Traversal",
-		Description: "When a filesystem is accessed Path-Traversal or Local-File-Inclusion (LFI) risks might arise. " +
-			"The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed or stored.",
-		Impact: "If this risk is unmitigated, attackers might be able to read sensitive files (configuration data, key/credential files, deployment files, " +
-			"business data files, etc.) from the filesystem of affected components.",
+		Description: "Quando um sistema de arquivos é acessado, podem surgir riscos de Traversal de Caminho ou Inclusão de Arquivo Local (LFI)." +
+			"A classificação de risco depende da sensibilidade do próprio ativo técnico e dos ativos de dados processados ou armazenados.",
+		Impact: "Se esse risco não for mitigado, os invasores poderão ler arquivos confidenciais (dados de configuração, arquivos de chave/credencial, arquivos de implantação, " +
+			"arquivos de dados de negócios, etc.) do sistema de arquivos dos componentes afetados.",
 		ASVS:       "V12 - File and Resources Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html",
 		Action:     "Path-Traversal Prevention",
-		Mitigation: "Before accessing the file cross-check that it resides in the expected folder and is of the expected " +
-			"type and filename/suffix. Try to use a mapping if possible instead of directly accessing by a filename which is " +
-			"(partly or fully) provided by the caller. " +
-			"When a third-party product is used instead of custom developed software, check if the product applies the proper mitigation and ensure a reasonable patch-level.",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation: "Antes de acessar o arquivo, verifique se ele reside na pasta esperada e se está na posição " +
+			"tipo e nome de arquivo / sufixo. Tente usar um mapeamento, se possível, em vez de acessar diretamente por um nome de arquivo que é " +
+			"(parcial ou totalmente) fornecido pelo chamador. " +
+			"Quando um produto de terceiros é usado em vez de um software desenvolvido sob medida, verifique se o produto aplica a atenuação adequada e garanta um nível de patch razoável.",
+		Check:          "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function:       model.Development,
 		STRIDE:         model.InformationDisclosure,
-		DetectionLogic: "Filesystems accessed by in-scope callers.",
-		RiskAssessment: "The risk rating depends on the sensitivity of the data stored inside the technical asset.",
-		FalsePositives: "File accesses by filenames not consisting of parts controllable by the caller can be considered " +
-			"as false positives after individual review.",
+		DetectionLogic: "Sistemas de arquivos acessados por chamadores dentro do escopo.",
+		RiskAssessment: "A classificação de risco depende da sensibilidade dos dados armazenados dentro do ativo técnico.",
+		FalsePositives: "Os acessos a arquivos por nomes de arquivos que não consistem em partes controláveis pelo chamador podem ser considerados " +
+			"como falsos positivos após revisão individual.",
 		ModelFailurePossibleReason: false,
 		CWE:                        22,
 	}

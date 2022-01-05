@@ -4,14 +4,15 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/threagile/threagile/colors"
 	"regexp"
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/threagile/threagile/colors"
 )
 
-const ThreagileVersion = "1.0.0" // Also update into example and stub model files and openapi.yaml
+const ThreagileVersion = "1.0.0" // Também atualizar para arquivos de modelo de exemplo e stub e openapi.yaml
 const TempFolder = "/dev/shm"    // TODO: make configurable via cmdline arg?
 
 var ParsedModelRoot ParsedModel
@@ -71,7 +72,7 @@ func MakeID(val string) string {
 
 // === Model Type Stuff ======================================
 
-type ModelInput struct { // TODO: Eventually remove this and directly use ParsedModelRoot? But then the error messages for model errors are not quite as good anymore...
+type ModelInput struct { // TODO:Eventualmente, remova isso e use diretamente o ParseedModelroot?Mas então as mensagens de erro para erros de modelo não são mais bem .....
 	Threagile_version                                  string
 	Title                                              string
 	Author                                             Author
@@ -243,11 +244,11 @@ func ParseQuantity(value string) (quantity Quantity, err error) {
 			return candidate.(Quantity), err
 		}
 	}
-	return quantity, errors.New("Unable to parse into type: " + value)
+	return quantity, errors.New("Incapaz de analisar o tipo: " + value)
 }
 
 func (what Quantity) String() string {
-	// NOTE: maintain list also in schema.json for validation in IDEs
+	// NOTE: Manter lista também no esquema.json para validação em IDES
 	return [...]string{"very-few", "few", "many", "very-many"}[what]
 }
 
@@ -287,11 +288,11 @@ func ParseConfidentiality(value string) (confidentiality Confidentiality, err er
 			return candidate.(Confidentiality), err
 		}
 	}
-	return confidentiality, errors.New("Unable to parse into type: " + value)
+	return confidentiality, errors.New("Incapaz de analisar o tipo::: " + value)
 }
 
 func (what Confidentiality) String() string {
-	// NOTE: maintain list also in schema.json for validation in IDEs
+	// NOTE: Manter lista também no esquema.json para validação em IDESESESES
 	return [...]string{"public", "internal", "restricted", "confidential", "strictly-confidential"}[what]
 }
 
@@ -360,7 +361,7 @@ func ParseCriticality(value string) (criticality Criticality, err error) {
 }
 
 func (what Criticality) String() string {
-	// NOTE: maintain list also in schema.json for validation in IDEs
+	// NOTE: Manter lista também no esquema.json para validação em IDES
 	return [...]string{"archive", "operational", "important", "critical", "mission-critical"}[what]
 }
 
@@ -415,7 +416,7 @@ func TechnicalAssetTypeValues() []TypeEnum {
 }
 
 func (what TechnicalAssetType) String() string {
-	// NOTE: maintain list also in schema.json for validation in IDEs
+	// NOTE: Manter lista também no esquema.json para validação em IDESES
 	return [...]string{"external-entity", "process", "datastore"}[what]
 }
 
@@ -438,7 +439,7 @@ func TechnicalAssetSizeValues() []TypeEnum {
 }
 
 func (what TechnicalAssetSize) String() string {
-	// NOTE: maintain list also in schema.json for validation in IDEs
+	// NOTE: Manter lista também no esquema.json para validação em IDES
 	return [...]string{"system", "service", "application", "component"}[what]
 }
 
@@ -459,7 +460,7 @@ func AuthorizationValues() []TypeEnum {
 }
 
 func (what Authorization) String() string {
-	// NOTE: maintain list also in schema.json for validation in IDEs
+	// NOTE: Manter lista também no esquema.json para validação em IDES
 	return [...]string{"none", "technical-user", "enduser-identity-propagation"}[what]
 }
 
@@ -488,7 +489,7 @@ func AuthenticationValues() []TypeEnum {
 }
 
 func (what Authentication) String() string {
-	// NOTE: maintain list also in schema.json for validation in IDEs
+	// NOTE: Manter lista também no esquema.json para validação em IDES
 	return [...]string{"none", "credentials", "session-id", "token", "client-certificate", "two-factor", "externalized"}[what]
 }
 
@@ -513,11 +514,11 @@ func ParseUsage(value string) (usage Usage, err error) {
 			return candidate.(Usage), err
 		}
 	}
-	return usage, errors.New("Unable to parse into type: " + value)
+	return usage, errors.New("Incapaz de analisar o tipooooo: " + value)
 }
 
 func (what Usage) String() string {
-	// NOTE: maintain list also in schema.json for validation in IDEs
+	// NOTE: Manter lista também no esquema.json para validação em IDES
 	return [...]string{"business", "devops"}[what]
 }
 
@@ -556,7 +557,7 @@ func ParseEncryptionStyle(value string) (encryptionStyle EncryptionStyle, err er
 }
 
 func (what EncryptionStyle) String() string {
-	// NOTE: maintain list also in schema.json for validation in IDEs
+	// NOTE: Manter lista também no esquema.json para validação em IDES
 	return [...]string{"none", "transparent", "data-with-symmetric-shared-key", "data-with-asymmetric-shared-key", "data-with-enduser-individual-key"}[what]
 }
 
@@ -585,7 +586,7 @@ func DataFormatValues() []TypeEnum {
 }
 
 func (what DataFormat) String() string {
-	// NOTE: maintain list also in schema.json for validation in IDEs
+	// NOTE: Manter lista também no esquema.json para validação em IDES
 	return [...]string{"json", "xml", "serialization", "file", "csv"}[what]
 }
 
@@ -726,7 +727,7 @@ func (what Protocol) IsPotentialDatabaseAccessProtocol(includingLaxDatabaseProto
 	strictlyDatabaseOnlyProtocol := what == JDBC_encrypted || what == ODBC_encrypted ||
 		what == NoSQL_access_protocol_encrypted || what == SQL_access_protocol_encrypted || what == JDBC || what == ODBC || what == NoSQL_access_protocol || what == SQL_access_protocol
 	if includingLaxDatabaseProtocols {
-		// include HTTP for REST-based NoSQL-DBs as well as unknown binary
+		// Inclua HTTP para NOSQL-DBS baseado em repouso, bem como binário desconhecido desconhecido desconhecido
 		return strictlyDatabaseOnlyProtocol || what == HTTPS || what == HTTP || what == BINARY || what == BINARY_encrypted
 	}
 	return strictlyDatabaseOnlyProtocol
@@ -777,7 +778,7 @@ const (
 	CLI
 	Task
 	Function
-	Gateway // TODO rename to API-Gateway to be more clear?
+	Gateway // TODO Renomear para a API-Gateway para ser mais claroais claroais claroais claroais claroais claroais claro?
 	IoTDevice
 	MessageQueue
 	StreamProcessing
@@ -861,7 +862,7 @@ func TechnicalAssetTechnologyValues() []TypeEnum {
 }
 
 func (what TechnicalAssetTechnology) String() string {
-	// NOTE: maintain list also in schema.json for validation in IDEs
+	// NOTE: Manter lista também no esquema.json para validação em IDES
 	return [...]string{"unknown-technology", "client-system", "browser", "desktop", "mobile-app", "devops-client",
 		"web-server", "web-application", "application-server", "database", "file-server", "local-file-system", "erp", "cms",
 		"web-service-rest", "web-service-soap", "ejb", "search-index", "search-engine", "service-registry", "reverse-proxy",
@@ -998,7 +999,7 @@ func TrustBoundaryTypeValues() []TypeEnum {
 }
 
 func (what TrustBoundaryType) String() string {
-	// NOTE: maintain list also in schema.json for validation in IDEs
+	// NOTE: Manter lista também no esquema.json para validação em IDES
 	return [...]string{"network-on-prem", "network-dedicated-hoster", "network-virtual-lan",
 		"network-cloud-provider", "network-cloud-security-group", "network-policy-namespace-isolation",
 		"execution-environment"}[what]
@@ -1286,7 +1287,7 @@ func (what DataAsset) ReceivedViaCommLinksSorted() []CommunicationLink {
 	return result
 }
 
-func IsTaggedWithBaseTag(tags []string, basetag string) bool { // basetags are before the colon ":" like in "aws:ec2" it's "aws". The subtag is after the colon. Also a pure "aws" tag matches the basetag "aws"
+func IsTaggedWithBaseTag(tags []string, basetag string) bool { // Basetags são antes do cólon ":" Como em "AWS: EC2" é "AWS".A subtag é depois do cólon.Também uma tag "AWS" pura corresponde ao Basetag "AWS"
 	basetag = strings.ToLower(strings.TrimSpace(basetag))
 	for _, tag := range tags {
 		tag = strings.ToLower(strings.TrimSpace(tag))
@@ -2424,11 +2425,11 @@ func (what TechnicalAsset) DetermineLabelColor() string {
 	*/
 }
 
-// red when mission-critical integrity, but still unauthenticated (non-readonly) channels access it
-// amber when critical integrity, but still unauthenticated (non-readonly) channels access it
-// pink when model forgery attempt (i.e. nothing being processed or stored)
+// vermelho quando a integridade da missão crítica, mas ainda não autenticada (não-readonly) os canais acessam
+// Âmbar quando integridade crítica, mas ainda não autenticado (não-readonly) os canais acessam
+// rosa quando modelo tentativa de falsificação (i.e. nada sendo processado ou armazenado) ou armazenado) ou armazenado) ou armazenado) ou armazenado) ou armazenado) ou armazenado)
 func (what TechnicalAsset) DetermineShapeBorderColor() string {
-	// TODO: Just move into main.go and let the generated risk determine the color, don't duplicate the logic here
+	// TODO: BUst se move para o main.go e deixe o risco gerado determinar a cor, não duplique a lógica aqui
 	// Check for red
 	if what.Confidentiality == StrictlyConfidential {
 		return colors.Red
@@ -2516,12 +2517,12 @@ func (what CommunicationLink) DetermineLabelColor() string {
 
 }
 
-// pink when model forgery attempt (i.e. nothing being sent and received)
+// rosa quando a tentativa de falsificação modelo (isto é, nada sendo enviado e recebido)
 func (what CommunicationLink) DetermineArrowColor() string {
 	// TODO: Just move into main.go and let the generated risk determine the color, don't duplicate the logic here
 	if len(what.DataAssetsSent) == 0 && len(what.DataAssetsReceived) == 0 ||
 		what.Protocol == UnknownProtocol {
-		return colors.Pink // pink, because it's strange when too many technical communication links transfer no data... some ok, but many in a diagram ist a sign of model forgery...
+		return colors.Pink // rosa, porque é estranho quando muitos links de comunicação técnica transferem sem dados ... alguns ok, mas muitos em um diagrama é um sinal de falsificação modelo ...ção modelo ...
 	}
 	if what.Usage == DevOps {
 		return colors.MiddleLightGray
@@ -2715,7 +2716,7 @@ func (what RiskExploitationLikelihood) String() string {
 }
 
 func (what RiskExploitationLikelihood) Title() string {
-	return [...]string{"Unlikely", "Likely", "Very Likely", "Frequent"}[what]
+	return [...]string{"Improvável", "Provável", "Muito provável", "Frequente"}[what]
 }
 
 func (what RiskExploitationLikelihood) Weight() int {
@@ -2750,7 +2751,7 @@ func (what RiskExploitationImpact) String() string {
 }
 
 func (what RiskExploitationImpact) Title() string {
-	return [...]string{"Low", "Medium", "High", "Very High"}[what]
+	return [...]string{"Baixo", "Médio", "Alto", "Muito Alto"}[what]
 }
 
 func (what RiskExploitationImpact) Weight() int {
@@ -2780,12 +2781,12 @@ func RiskFunctionValues() []TypeEnum {
 }
 
 func (what RiskFunction) String() string {
-	// NOTE: maintain list also in schema.json for validation in IDEs
+	// NOTE:Manter lista também no esquema.json para validação em IDES
 	return [...]string{"business-side", "architecture", "development", "operations"}[what]
 }
 
 func (what RiskFunction) Title() string {
-	return [...]string{"Business Side", "Architecture", "Development", "Operations"}[what]
+	return [...]string{"Lado de Negócios", "Arquitetura", "Desenvolvimento", "Operações"}[what]
 }
 
 func (what RiskFunction) MarshalJSON() ([]byte, error) {
@@ -2872,7 +2873,7 @@ func (what MacroQuestion) IsMatchingValueConstraint(answer string) bool {
 }
 
 type RiskCategory struct {
-	// TODO: refactor all "Id" here and elsewhere to "ID"
+	// TODO:Refator todos "id" aqui e em outro lugar para "id"
 	Id                         string
 	Title                      string
 	Description                string
@@ -2925,7 +2926,7 @@ func (what ByRiskCategoryHighestContainingRiskSeveritySortStillAtRisk) Less(i, j
 }
 
 type RiskStatistics struct {
-	// TODO add also some more like before / after (i.e. with mitigation applied)
+	// TODO Adicionar também um pouco mais como antes / depois (isto é, com mitigação aplicada)ação aplicada)ação aplicada)ação aplicada)
 	Risks map[string]map[string]int `json:"risks"`
 }
 
@@ -2948,7 +2949,7 @@ type Risk struct {
 	// TODO: refactor all "Id" here to "ID"?
 }
 
-func (what Risk) GetRiskTracking() RiskTracking { // TODO: Unify function naming reagrding Get etc.
+func (what Risk) GetRiskTracking() RiskTracking { // TODO: Unificar a nomeação da função em relação a obter etc.
 	var result RiskTracking
 	if riskTracking, ok := ParsedModelRoot.RiskTracking[what.SyntheticId]; ok {
 		result = riskTracking
@@ -3070,7 +3071,7 @@ type RiskRule interface {
 	GenerateRisks(parsedModel ParsedModel) []Risk
 }
 
-// as in Go ranging over map is random order, range over them in sorted (hence reproducible) way:
+// Como em movimento sobre o mapa é ordem aleatória, varia sobre eles na maneira ordenada (portanto, reprodutível):
 func SortedRiskCategories() []RiskCategory {
 	categories := make([]RiskCategory, 0)
 	for k, _ := range GeneratedRisksByCategory {

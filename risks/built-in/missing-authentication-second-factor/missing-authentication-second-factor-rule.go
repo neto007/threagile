@@ -2,29 +2,29 @@ package missing_authentication_second_factor
 
 import (
 	"github.com/threagile/threagile/model"
-	"github.com/threagile/threagile/risks/built-in/missing-authentication"
+	missing_authentication "github.com/threagile/threagile/risks/built-in/missing-authentication"
 )
 
 func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "missing-authentication-second-factor",
 		Title: "Missing Two-Factor Authentication (2FA)",
-		Description: "Technical assets (especially multi-tenant systems) should authenticate incoming requests with " +
-			"two-factor (2FA) authentication when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by humans.",
-		Impact:     "If this risk is unmitigated, attackers might be able to access or modify highly sensitive data without strong authentication.",
+		Description: "Ativos técnicos (especialmente sistemas multi-tenant) devem autenticar as solicitações recebidas com " +
+			"Autenticação de dois fator (2FA) quando o ativo processa ou armazena dados altamente sensíveis (em termos de confidencialidade, integridade e disponibilidade) e é acessado por humanos.",
+		Impact:     "Se este risco for ignorado, os invasores poderão acessar ou modificar dados altamente confidenciais sem autenticação forte.",
 		ASVS:       "V2 - Authentication Verification Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Multifactor_Authentication_Cheat_Sheet.html",
-		Action:     "Authentication with Second Factor (2FA)",
-		Mitigation: "Apply an authentication method to the technical asset protecting highly sensitive data via " +
-			"two-factor authentication for human users.",
-		Check:    "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Action:     "Autenticação com o segundo fator (2FA)",
+		Mitigation: "Aplique um método de autenticação para o ativo técnico que protege dados altamente sensíveis via " +
+			"Autenticação de dois fatores para usuários humanos.",
+		Check:    "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function: model.BusinessSide,
 		STRIDE:   model.ElevationOfPrivilege,
-		DetectionLogic: "In-scope technical assets (except " + model.LoadBalancer.String() + ", " + model.ReverseProxy.String() + ", " + model.WAF.String() + ", " + model.IDS.String() + ", and " + model.IPS.String() + ") should authenticate incoming requests via two-factor authentication (2FA) " +
-			"when the asset processes or stores highly sensitive data (in terms of confidentiality, integrity, and availability) and is accessed by a client used by a human user.",
+		DetectionLogic: "Ativos técnicos dentro do escopo (exceto " + model.LoadBalancer.String() + ", " + model.ReverseProxy.String() + ", " + model.WAF.String() + ", " + model.IDS.String() + ", e " + model.IPS.String() + ") deve autenticar solicitações recebidas via autenticação de dois fatoresores (2FA) " +
+			"quando o ativo processa ou armazena dados altamente sensíveis (em termos de confidencialidade, integridade e disponibilidade) e é acessado por um cliente usado por um usuário humano.",
 		RiskAssessment: model.MediumSeverity.String(),
-		FalsePositives: "Technical assets which do not process requests regarding functionality or data linked to end-users (customers) " +
-			"can be considered as false positives after individual review.",
+		FalsePositives: "Ativos técnicos que não processam solicitações de funcionalidade ou dados vinculados aos usuários finais (clientes) " +
+			"podem ser considerados falsos positivos após revisão individual.",
 		ModelFailurePossibleReason: false,
 		CWE:                        308,
 	}

@@ -1,39 +1,40 @@
 package unguarded_access_from_internet
 
 import (
-	"github.com/threagile/threagile/model"
 	"sort"
+
+	"github.com/threagile/threagile/model"
 )
 
 func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "unguarded-access-from-internet",
 		Title: "Unguarded Access From Internet",
-		Description: "Internet-exposed assets must be guarded by a protecting service, application, " +
-			"or reverse-proxy.",
-		Impact: "If this risk is unmitigated, attackers might be able to directly attack sensitive systems without any hardening components in-between " +
-			"due to them being directly exposed on the internet.",
+		Description: "Ativos expostos à Internet devem ser protegidos por um serviço de proteção, aplicativo, " +
+			"ou proxy reverso.",
+		Impact: "Se este risco não for mitigado, os invasores podem ser capazes de atacar diretamente sistemas sensíveis sem nenhum componente de proteção entre " +
+			"por estarem diretamente expostos na internet.",
 		ASVS:       "V1 - Architecture, Design and Threat Modeling Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
 		Action:     "Encapsulation of Technical Asset",
-		Mitigation: "Encapsulate the asset behind a guarding service, application, or reverse-proxy. " +
-			"For admin maintenance a bastion-host should be used as a jump-server. " +
-			"For file transfer a store-and-forward-host should be used as an indirect file exchange platform.",
-		Check:    "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation: "Encapsule o ativo por trás de um serviço de proteção, aplicativo ou proxy reverso. " +
+			"Para manutenção do administrador, um host bastion deve ser usado como servidor de salto. " +
+			"Para a transferência de arquivos, um host de armazenamento e encaminhamento deve ser usado como uma plataforma de troca indireta de arquivos.",
+		Check:    "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function: model.Architecture,
 		STRIDE:   model.ElevationOfPrivilege,
-		DetectionLogic: "In-scope technical assets (excluding " + model.LoadBalancer.String() + ") with confidentiality rating " +
-			"of " + model.Confidential.String() + " (or higher) or with integrity rating of " + model.Critical.String() + " (or higher) when " +
-			"accessed directly from the internet. All " +
-			model.WebServer.String() + ", " + model.WebApplication.String() + ", " + model.ReverseProxy.String() + ", " + model.WAF.String() + ", and " + model.Gateway.String() + " assets are exempted from this risk when " +
-			"they do not consist of custom developed code and " +
-			"the data-flow only consists of HTTP or FTP protocols. Access from " + model.Monitoring.String() + " systems " +
-			"as well as VPN-protected connections are exempted.",
-		RiskAssessment: "The matching technical assets are at " + model.LowSeverity.String() + " risk. When either the " +
-			"confidentiality rating is " + model.StrictlyConfidential.String() + " or the integrity rating " +
-			"is " + model.MissionCritical.String() + ", the risk-rating is considered " + model.MediumSeverity.String() + ". " +
-			"For assets with RAA values higher than 40 % the risk-rating increases.",
-		FalsePositives:             "When other means of filtering client requests are applied equivalent of " + model.ReverseProxy.String() + ", " + model.WAF.String() + ", or " + model.Gateway.String() + " components.",
+		DetectionLogic: "Ativos técnicos dentro do escopo (excluding " + model.LoadBalancer.String() + ") com classificação de confidencialidade " +
+			"de " + model.Confidential.String() + " (ou superior) ou com classificação de integridade de " + model.Critical.String() + " (ou superior) quando " +
+			"acessado diretamente da internet. Tudo " +
+			model.WebServer.String() + ", " + model.WebApplication.String() + ", " + model.ReverseProxy.String() + ", " + model.WAF.String() + ", e " + model.Gateway.String() + " ativos são isentos deste risco quando " +
+			"eles não consistem em código desenvolvido de forma personalizada e " +
+			"o fluxo de dados consiste apenas em protocolos HTTP ou FTP. Acesso de " + model.Monitoring.String() + " sistemas " +
+			"assim como as conexões protegidas por VPN são isentas.",
+		RiskAssessment: "Os recursos técnicos correspondentes estão em " + model.LowSeverity.String() + " risco. Quando o " +
+			"classificação de confidencialidade é " + model.StrictlyConfidential.String() + " ou a classificação de integridade " +
+			"é " + model.MissionCritical.String() + ", a classificação de risco é considerada " + model.MediumSeverity.String() + ". " +
+			"Para ativos com valores de RAA superiores a 40%, a classificação de risco aumenta.",
+		FalsePositives:             "Quando outros meios de filtrar solicitações do cliente são aplicados equivalentes " + model.ReverseProxy.String() + ", " + model.WAF.String() + ", ou " + model.Gateway.String() + " componentes.",
 		ModelFailurePossibleReason: false,
 		CWE:                        501,
 	}

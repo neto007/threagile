@@ -8,19 +8,19 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "incomplete-model",
 		Title: "Incomplete Model",
-		Description: "When the threat model contains unknown technologies or transfers data over unknown protocols, this is " +
-			"an indicator for an incomplete model.",
+		Description: "Quando o modelo de ameaça contém tecnologias desconhecidas ou transfere dados por meio de protocolos desconhecidos, isso é " +
+			"um indicador para um modelo incompleto.",
 		Impact:                     "If this risk is unmitigated, other risks might not be noticed as the model is incomplete.",
 		ASVS:                       "V1 - Architecture, Design and Threat Modeling Requirements",
 		CheatSheet:                 "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html",
 		Action:                     "Threat Modeling Completeness",
-		Mitigation:                 "Try to find out what technology or protocol is used instead of specifying that it is unknown.",
-		Check:                      "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation:                 "Tente descobrir qual tecnologia ou protocolo é usado em vez de especificar que é desconhecido.",
+		Check:                      "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function:                   model.Architecture,
 		STRIDE:                     model.InformationDisclosure,
-		DetectionLogic:             "All technical assets and communication links with technology type or protocol type specified as unknown.",
+		DetectionLogic:             "Todos os ativos técnicos e links de comunicação com tipo de tecnologia ou tipo de protocolo especificado como desconhecido.",
 		RiskAssessment:             model.LowSeverity.String(),
-		FalsePositives:             "Usually no false positives as this looks like an incomplete model.",
+		FalsePositives:             "Normalmente não há falsos positivos, pois parece um modelo incompleto.",
 		ModelFailurePossibleReason: true,
 		CWE:                        1008,
 	}

@@ -8,24 +8,24 @@ func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "push-instead-of-pull-deployment",
 		Title: "Push instead of Pull Deployment",
-		Description: "When comparing push-based vs. pull-based deployments from a security perspective, pull-based " +
-			"deployments improve the overall security of the deployment targets. Every exposed interface of a production system to accept a deployment " +
-			"increases the attack surface of the production system, thus a pull-based approach exposes less attack surface relevant " +
+		Description: "Ao comparar implantações baseadas em push-baseadas em uma perspectiva de segurança, baseada em puxar " +
+			"as implantações melhoram a segurança geral das metas de implantação.Toda interface exposta de um sistema de produção para aceitar uma implantação " +
+			"aumenta a superfície do ataque do sistema de produção, portanto, uma abordagem baseada em puxar expõe menos superfície de ataque relevante " +
 			"interfaces.",
-		Impact: "If this risk is unmitigated, attackers might have more potential target vectors for attacks, as the overall attack surface is " +
-			"unnecessarily increased.",
+		Impact: "Se este risco for ignorado, os invasores podem ter mais vetores alvo potenciais para ataques, já que a superfície de ataque geral é " +
+			"Aumento desnecessariamente.",
 		ASVS:       "V1 - Architecture, Design and Threat Modeling Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
 		Action:     "Build Pipeline Hardening",
-		Mitigation: "Try to prefer pull-based deployments (like GitOps scenarios offer) over push-based deployments to reduce the attack surface of the production system.",
-		Check:      "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation: "Tente preferir implantações baseadas em puxar (como ofertas de cenários Gitops) sobre as implantações baseadas em push para reduzir a superfície do ataque do sistema de produção.",
+		Check:      "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function:   model.Architecture,
 		STRIDE:     model.Tampering,
-		DetectionLogic: "Models with build pipeline components accessing in-scope targets of deployment (in a non-readonly way) which " +
-			"are not build-related components themselves.",
-		RiskAssessment: "The risk rating depends on the highest sensitivity of the deployment targets running custom-developed parts.",
-		FalsePositives: "Communication links that are not deployment paths " +
-			"can be considered as false positives after individual review.",
+		DetectionLogic: "Modelos com componentes de pipeline de construção acessando alvos no escopo de implantação (de maneira não readonly) que " +
+			"Não são componentes relacionados a construir.",
+		RiskAssessment: "A classificação de risco depende da maior sensibilidade das metas de implantação que executam peças desenvolvidas personalizadas.",
+		FalsePositives: "Links de comunicação que não são caminhos de implantação " +
+			"podem ser considerados falsos positivos após revisão individual.",
 		ModelFailurePossibleReason: true,
 		CWE:                        1127,
 	}

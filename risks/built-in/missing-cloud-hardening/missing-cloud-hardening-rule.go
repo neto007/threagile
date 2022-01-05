@@ -1,36 +1,37 @@
 package missing_cloud_hardening
 
 import (
-	"github.com/threagile/threagile/model"
 	"sort"
+
+	"github.com/threagile/threagile/model"
 )
 
 func Category() model.RiskCategory {
 	return model.RiskCategory{
 		Id:    "missing-cloud-hardening",
 		Title: "Missing Cloud Hardening",
-		Description: "Cloud components should be hardened according to the cloud vendor best practices. This affects their " +
-			"configuration, auditing, and further areas.",
-		Impact:     "If this risk is unmitigated, attackers might access cloud components in an unintended way.",
+		Description: "Os componentes da nuvem devem ser reforçados de acordo com as práticas recomendadas do fornecedor da nuvem. Isso afeta seus " +
+			"configuração, auditoria e outras áreas. ",
+		Impact:     "Se esse risco não for mitigado, os invasores podem acessar os componentes da nuvem de forma não intencional.",
 		ASVS:       "V1 - Architecture, Design and Threat Modeling Requirements",
 		CheatSheet: "https://cheatsheetseries.owasp.org/cheatsheets/Attack_Surface_Analysis_Cheat_Sheet.html",
 		Action:     "Cloud Hardening",
-		Mitigation: "Apply hardening of all cloud components and services, taking special care to follow the individual risk descriptions (which " +
-			"depend on the cloud provider tags in the model). " +
-			"<br><br>For <b>Amazon Web Services (AWS)</b>: Follow the <i>CIS Benchmark for Amazon Web Services</i> (see also the automated checks of cloud audit tools like <i>\"PacBot\", \"CloudSploit\", \"CloudMapper\", \"ScoutSuite\", or \"Prowler AWS CIS Benchmark Tool\"</i>). " +
-			"<br>For EC2 and other servers running Amazon Linux, follow the <i>CIS Benchmark for Amazon Linux</i> and switch to IMDSv2. " +
-			"<br>For S3 buckets follow the <i>Security Best Practices for Amazon S3</i> at <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\">https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html</a> to avoid accidental leakage. " +
-			"<br>Also take a look at some of these tools: <a href=\"https://github.com/toniblyx/my-arsenal-of-aws-security-tools\">https://github.com/toniblyx/my-arsenal-of-aws-security-tools</a> " +
-			"<br><br>For <b>Microsoft Azure</b>: Follow the <i>CIS Benchmark for Microsoft Azure</i> (see also the automated checks of cloud audit tools like <i>\"CloudSploit\" or \"ScoutSuite\"</i>)." +
-			"<br><br>For <b>Google Cloud Platform</b>: Follow the <i>CIS Benchmark for Google Cloud Computing Platform</i> (see also the automated checks of cloud audit tools like <i>\"CloudSploit\" or \"ScoutSuite\"</i>). " +
-			"<br><br>For <b>Oracle Cloud Platform</b>: Follow the hardening best practices (see also the automated checks of cloud audit tools like <i>\"CloudSploit\"</i>).",
-		Check:          "Are recommendations from the linked cheat sheet and referenced ASVS chapter applied?",
+		Mitigation: "Aplique a proteção de todos os componentes e serviços da nuvem, tendo um cuidado especial para seguir as descrições de risco individuais (que " +
+			"dependem das tags do provedor de nuvem no modelo). " +
+			"<br><br>Para <b>Amazon Web Services (AWS)</b>: Siga o <i>CIS Benchmark for Amazon Web Services</i> (veja também as verificações automatizadas de ferramentas de auditoria em nuvem como <i>\"PacBot\", \"CloudSploit\", \"CloudMapper\", \"ScoutSuite\", ou \"Prowler AWS CIS Benchmark Tool\"</i>). " +
+			"<br>Para EC2 e outros servers rodando Amazon Linux, siga o <i>CIS Benchmark for Amazon Linux</i> e mude para IMDSv2. " +
+			"<br>Para buckets S3, siga as <i>Security Best Practices for Amazon S3</i> em <a href=\"https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html\">https://docs.aws.amazon.com/AmazonS3/latest/dev/security-best-practices.html</a> para evitar vazamento acidental. " +
+			"<br>Também dê uma olhada em algumas dessas ferramentas: <a href=\"https://github.com/toniblyx/my-arsenal-of-aws-security-tools\">https://github.com/toniblyx/my-arsenal-of-aws-security-tools</a> " +
+			"<br><br>Para <b>Microsoft Azure</b>: Segue o <i>CIS Benchmark for Microsoft Azure</i> (veja também as verificações automatizadas de ferramentas de auditoria em nuvem como <i>\"CloudSploit\" ou \"ScoutSuite\"</i>)." +
+			"<br><br>Para <b>Google Cloud Platform</b>: Siga o <i>CIS Benchmark for Google Cloud Computing Platform</i> (ambém as verificações automatizadas de ferramentas de auditoria em nuvem como <i>\"CloudSploit\" or \"ScoutSuite\"</i>). " +
+			"<br><br>Para <b>Oracle Cloud Platform</b>: Siga as melhores práticas de fortalecimento (consulte também as verificações automatizadas de ferramentas de auditoria em nuvem como <i>\"CloudSploit\"</i>).",
+		Check:          "As recomendações do cheat sheet e do ASVS/CSVS referenciado são aplicadas?",
 		Function:       model.Operations,
 		STRIDE:         model.Tampering,
-		DetectionLogic: "In-scope cloud components (either residing in cloud trust boundaries or more specifically tagged with cloud provider types).",
-		RiskAssessment: "The risk rating depends on the sensitivity of the technical asset itself and of the data assets processed and stored.",
-		FalsePositives: "Cloud components not running parts of the target architecture can be considered " +
-			"as false positives after individual review.",
+		DetectionLogic: "Componentes de nuvem no escopo (residindo nos limites de confiança da nuvem ou mais especificamente marcados com tipos de provedor de nuvem).",
+		RiskAssessment: "A classificação de risco depende da sensibilidade do próprio ativo técnico e dos ativos de dados processados e armazenados.",
+		FalsePositives: "Os componentes da nuvem que não executam partes da arquitetura de destino podem ser considerados " +
+			"como falsos positivos após revisão individual.",
 		ModelFailurePossibleReason: false,
 		CWE:                        1008,
 	}
